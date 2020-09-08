@@ -8,7 +8,6 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 
 [https://github.com/fungaegis/notes](https://github.com/fungaegis/notes)
 
-<<<<<<< HEAD
 
 <a class="github-button" href="https://github.com/fungaegis/notes" data-size="large" aria-label="Star fungaegis/notes on GitHub">Star</a>
 
@@ -22,5 +21,4 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 
 
 <a class="github-button" href="https://github.com/fungaegis/notes/issues" data-size="large" data-show-count="true" aria-label="Issue fungaegis/notes on GitHub">Issue</a>
-=======
->>>>>>> 0e2a820f1ecd18d1f33aa64e4a034fbaa876c394
+
