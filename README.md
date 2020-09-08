@@ -20,5 +20,3 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 <a class="github-button" href="https://github.com/fungaegis/notes/issues" data-size="large" aria-label="Issue fungaegis/notes on GitHub">Issue</a>
 
 
-<a class="github-button" href="https://github.com/fungaegis/notes/issues" data-size="large" data-show-count="true" aria-label="Issue fungaegis/notes on GitHub">Issue</a>
-
