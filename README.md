@@ -9,11 +9,15 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 [https://github.com/fungaegis/notes](https://github.com/fungaegis/notes)
 
 
-<iframe src="https://ghbtns.com/github-btn.html?user=fungaegis&repo=notes&type=star&count=false&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
+<a class="github-button" href="https://github.com/fungaegis/notes" data-size="large" aria-label="Star fungaegis/notes on GitHub">Star</a>
 
-<iframe src="https://ghbtns.com/github-btn.html?user=fungaegis&repo=notes&type=watch&count=false&size=large&v=2" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
+<a class="github-button" href="https://github.com/fungaegis" data-size="large" aria-label="Follow @fungaegis on GitHub">Follow @fungaegis</a>
+
+<a class="github-button" href="https://github.com/fungaegis/notes/fork" data-size="large" aria-label="Fork fungaegis/notes on GitHub">Fork</a>
+
+<a class="github-button" href="https://github.com/fungaegis/notes/subscription" data-size="large" aria-label="Watch fungaegis/notes on GitHub">Watch</a>
+
+<a class="github-button" href="https://github.com/fungaegis/notes/issues" data-size="large" aria-label="Issue fungaegis/notes on GitHub">Issue</a>
 
 
-<iframe src="https://ghbtns.com/github-btn.html?user=fungaegis&repo=notes&type=fork&count=false&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-
-<iframe src="https://ghbtns.com/github-btn.html?user=fungaegis&type=follow&count=false&size=large" frameborder="0" scrolling="0" width="230" height="30" title="GitHub"></iframe>
+<a class="github-button" href="https://github.com/fungaegis/notes/issues" data-size="large" data-show-count="true" aria-label="Issue fungaegis/notes on GitHub">Issue</a>
