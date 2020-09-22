@@ -71,3 +71,30 @@ GitLab是存储镜像的镜像仓库
 
 构建可执行的程序包（Java为tar包）
 将tar包导入基础镜像（Java程序的基础镜像可以理解为一个包含了JDK的linux系统），其实现可以通过dockerfile导入tar包到基础镜像从而构建为应用镜像，也可以通过openshift的s2i启动一个名为build的pod将tar包的二进制流导入基础镜像然后通过docker commit构建为应用镜像
+
+
+## 团队部署流程
+
+- dev分支push
+1. push dev分支代码
+2. gitlab → webhook
+3. 触发jenkins
+5. 静态扫描
+6. 单元测试
+7. sonar 成功就继续 失败就取消
+8. go build(打包go程序二进制)
+9. docker build(具备go环境的基础镜像 + 二进制)
+10. push docker 到仓库
+11. dev 环境 k8s部署
+
+- dev合并到test
+1. merge dev分支到test
+2. 通过gitlab的web hook通知jenkins
+3. jenkins静态扫描
+4. 单元测试
+5. sonar
+6. go build(打包go程序二进制)
+7. docker build(具备go环境的基础镜像 + 二进制)
+8. push docker 到仓库
+9. test 环境 k8s部署
+10. test环境冒烟自动化测试(失败回滚)
