@@ -1,0 +1,219 @@
+# allure在linux环境的安装
+首先在本机安装jdk8以上版本，以及 npm
+安装allure服务：```npm install -g allure-commandline --save-dev ```
+python安装allure库：```sudo pip3 install allure-python-commons```
+python安装pytest的allure插件库：```sudo pip3 install allure-pytest```
+此时运行：```allure``` 应该会有相关的帮助指引，若报错则未安装成功
+
+# allure使用
+## 命令行参数
+```shell
+qydev012@qydev012:~/workspace/uiautotest$ allure --help
+Usage: allure [options] [command] [command options]
+  Options:
+    --help
+      Print commandline help.
+    -q, --quiet
+      Switch on the quiet mode.
+      Default: false
+    -v, --verbose
+      Switch on the verbose mode.
+      Default: false
+    --version
+      Print commandline version.
+      Default: false
+  Commands:
+    generate      Generate the report
+      Usage: generate [options] The directories with allure results
+        Options:
+          -c, --clean
+            Clean Allure report directory before generating a new one.
+            Default: false
+          --config
+            Allure commandline config path. If specified overrides values from 
+            --profile and --configDirectory.
+          --configDirectory
+            Allure commandline configurations directory. By default uses 
+            ALLURE_HOME directory.
+          --profile
+            Allure commandline configuration profile.
+          -o, --report-dir, --output
+            The directory to generate Allure report into.
+            Default: allure-report
+
+    serve      Serve the report
+      Usage: serve [options] The directories with allure results
+        Options:
+          --config
+            Allure commandline config path. If specified overrides values from 
+            --profile and --configDirectory.
+          --configDirectory
+            Allure commandline configurations directory. By default uses 
+            ALLURE_HOME directory.
+          -h, --host
+            This host will be used to start web server for the report.
+          -p, --port
+            This port will be used to start web server for the report.
+            Default: 0
+          --profile
+            Allure commandline configuration profile.
+
+    open      Open generated report
+      Usage: open [options] The report directory
+        Options:
+          -h, --host
+            This host will be used to start web server for the report.
+          -p, --port
+            This port will be used to start web server for the report.
+            Default: 0
+
+    plugin      Generate the report
+      Usage: plugin [options]
+        Options:
+          --config
+            Allure commandline config path. If specified overrides values from 
+            --profile and --configDirectory.
+          --configDirectory
+            Allure commandline configurations directory. By default uses 
+            ALLURE_HOME directory.
+          --profile
+            Allure commandline configuration profile.
+```
+## 常用的几个参数解读
+- options:
+  - -q  安静模式,默认关闭  开启后  将会有allure从源文件-生成文件过程中的日志
+  - -v  日志模式,默认关闭  开启后  将会有详细的日志
+  - --version  版本  可单独使用
+
+![image.png](https://upload-images.jianshu.io/upload_images/20499241-5276817203ffbb9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+- Commands:
+  - generate  把源文件生成report
+    - options:
+      - -c & --clean 在生成新的Allure报告目录之前，清除该目录。(tips:清除的是生成目录,注意源文件不能和生成目录一个地址)
+      - -o & --report-dir & --output  输出report文件地址
+  - serve  临时利用源文件启动report服务
+    - -h & --host 临时服务host
+    - -p & --port 临时服务port
+
+### 常用生成report语法
+```shell
+allure  generate 源文件 -o 输出文件 --clean # 源文件 != 输出文件
+allure serve 源文件  # 临时使用
+```
+-- --
+## 代码使用
+-- -- 
+### 标记用例
+```python
+    @allure.feature("")  # 标记特性场景（大功能模块类级）
+    @allure.story("")  # 次于feature的标记用例（分支模块函数级）
+```
+![第一层为feature,第二层为story](https://upload-images.jianshu.io/upload_images/20499241-66259cd65dde6629.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/20499241-bb41502303cb591e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+-- --
+### 用例步骤
+方法一：用作装饰器在function上
+```python
+    @allure.step("用例步骤")
+    def func():
+        pass
+```
+方法二：分步步骤，在代码块中
+```python
+    with allure.step(""):
+        pass  # 代码块
+```
+![](https://upload-images.jianshu.io/upload_images/20499241-95c7b1d931e07e20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+-- --
+## 缺陷等级
+
+1）blocker级别：中断缺陷（客户端程序无响应，无法执行下一步操作）
+2）critical级别：临界缺陷（功能点缺失）
+3）normal级别：正常 默认为这个级别
+4）minor级别：次要缺陷（界面错误与UI需求不符）
+5）trivial级别：轻微缺陷（必输项无提示，或者提示不规范）
+
+|级别|描述|
+|-|-|
+|blocker|中断缺陷|
+|critical|功能缺陷|
+|minor|次要缺陷|
+|trivial|轻微缺陷|
+|normal|正常|
+
+```python
+    @allure.severity("blocker")
+    def func():
+        pass
+```
+![未声明优先级](https://upload-images.jianshu.io/upload_images/20499241-f6ff8759388f5ebc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+-- --
+## 附加信息
+
+     allure.attach(body, name=None, attachment_type=None, extension=None)
+
+|参数|描述|
+|-|-|
+|body|数据|
+|name|附件名称|
+|attachment_type|附件类型|
+|extension|后缀名|
+
+### 附件类型
+|类型|类型值|
+|-|-|
+|文本	|allure.attachment_type.TEXT|
+CSV|	allure.attachment_type.CSV|
+图片	|allure.attachment_type.JPG或PNG|
+PDF|	allure.attachment_type.PDF|
+html文件|	allure.attachment_type.HTML|
+json文件|	allure.attachment_type.JSON|
+xml文件|	allure.attachment_type.XML|
+mp4|	allure.attachment_type.MP4|
+
+
+```python
+    def test_login_failed(self, init_driver, data):
+    driver = lp(init_driver)
+    with allure.step("步骤一登录"):
+        driver.login(data["account"], data["password"])
+    with allure.step("步骤二拿content"):
+        content = driver.get_login_content()
+    allure.attach(content, "实际结果")
+    allure.attach(data["content"], "预期结果")  # 可以用来存放图片
+    assert content == data["content"]
+    
+    # 添加照片附件
+    with open(r"2.jpg","rb") as file:          #先打开图片
+        file=file.read()　　　　　　　　　　　#读取图片
+    allure.attach(file,"预期结果",attachment_type=allure.attachment_type.JPG)　
+```
+![](https://upload-images.jianshu.io/upload_images/20499241-d69932905f2915e9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/20499241-a6786e97644d712c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![attach图中打错了](https://upload-images.jianshu.io/upload_images/20499241-95d89d80fbd9cd4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+-- --
+## 其他
+
+```python
+    #
+    allure.link(url, link_type=LinkType.LINK, name=None)
+    allure.testcase(url, name=None)  # 对应的用例
+    allure.issue(url, name=None)  # 这里传的是一个连接，记录的是你的问题
+```
+-- --
+## 结合pytest生成源文件
+pytest.main使用
+```python
+    pytest.main("--alluredir=path")  # path 为路径
+```
+命令行使用
+```shell
+    pytest --alluredir=path  # path 为路径
+```
+## 效果图
+![index](https://upload-images.jianshu.io/upload_images/20499241-5bc437c5ced88fbc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![testsuite](https://upload-images.jianshu.io/upload_images/20499241-3a752ca2cc8bc972.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
