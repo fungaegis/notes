@@ -1,0 +1,59 @@
+## git流程
+git的提交流程分为四个阶段：
+- 未操作前属于 工作区
+- `add`: 操作后属于 缓冲区
+- `commit`：操作后属于 归档区
+- `push`： 远端仓库
+
+## 生成rsa密钥&绑定github
+1. 生成SSH密令：密令默认存放路径`~/.ssh/XXX_rsa.pub`:`ssh-keygen -t rsa -C "email" -f ~/.ssh/XXX_rsa` 其中`-C` `-f`都是可选的
+2. 配置SSH密令：查看并复制完整公钥到github中绑定:`cat ~/.ssh/XXX_rsa.pub`
+3. 添加Git配置:
+    - `git config --global user.email "XXXX@XXX.com"`		
+    - `git config --global user.name "XXXX"`
+4. 首次连接github的时候需： `ssh -T git@github.com`
+
+## 常规操作
+- `git status`: 查看状态
+- `git log`: 查看日志
+- `git log -p -2`: 查看提交日志及条数
+    - `-p`为详细信息
+- `git log --graph`: 分支图形化
+- `git reset HEAD <file>...`: 撤销提交到缓冲区
+- `git diff`: 查看区别	
+- `git reflog`: 查看过去
+
+## tag标签
+- `git tag -a  标签 -m 'log`: 新增附注标签
+    - `-a`: 新增标签名
+    - `-m`: 备注
+- `git tag`: 查看标签
+- `git tag 标签`: 新增标签
+
+## 分支操作
+- `git checkout 分支名`: 创建新分支并切换
+- `git branch -v`: 查看分支及分支最近提交记录
+- `git branch`: 查看分支列表
+- `git branch -d {分支名}`: 删除分支 
+
+## 切换提交版本
+`git reset --mixed hash`: 将缓冲区、归档区回滚到hash
+`git relog`：查看全部操作记录
+`git reset --hard hash`：将全部回滚到hash
+`git reset --soft hash`：将归档区回滚到hash
+`git revert hash`将hash的归档的数据全部删除
+
+## 拉取数据
+`git fetch`: 拉取数据
+`git merge`: 合并分支
+`git pull`: 相当于`git fetch` + `git merge`
+
+## 远端分支操作
+`git remote -v`: 查看远端分支
+`git remote remove origin`：删除远端分支
+`git remote add origin`：添加远端分支
+
+## stash暂存
+- `git stash save "log"`: 暂存修改
+- `git stash list`: 暂存列表
+- `git stash pop --index stash@{0}`: 删除指定索引暂存

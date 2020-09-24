@@ -1,5 +1,6 @@
 ## 参考资料
 https://zhuanlan.zhihu.com/p/162928436
+在线k8s：https://www.katacoda.com/
 
 ## 1. 简介:
 1. Kubernetes是一个容器编排平台, 用于管理容器的工作负载和服务
