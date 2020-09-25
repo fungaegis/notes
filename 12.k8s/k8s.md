@@ -130,6 +130,4 @@ kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod
 `kubectl delete pods pod_name`: 删除pod
 `kubectl delete deployment deployment_name`: 删除deployment,会将所有的pod都删除
 `kubectl create -f xx.yaml`: 用配置文件创建deployment
-``
-``
 
