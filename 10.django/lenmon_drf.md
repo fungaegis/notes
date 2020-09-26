@@ -314,9 +314,226 @@ REST_FRAMEWORK = {
 
 
 3.Mixin
+
+●RetrieveModelMixin
+。提供retrieve（request，*args，**kwargs）方法
+。获取已存在的详情数据（一条记录）
+。获取成功，则返回200 OK
+。如果不存在，则返回404 Not Found
+●UpdateModelMixin
+。提供update（request，*args，**kwargs）方法，用于全更新
+。提供partial_update（request，*args，**kwargs）方法，用于部分更新，
+。更新已存在的模型实例（更新一 条记录）
+。更新成功，则返回200 OK
+●DestroyModelMixin
+。提供destroy（request，*args，**kwargs）方法
+。删除一条已存在的数据（删除一 条记录）
+。删除成功，则返回204 No Content
+。如果不存在，则返回404 Not Found
+●ListModelMixin
+。提供list（request，*args，**kwargs）方法
+。获取已存在的列表数据（获取多条记录）
+。获取成功，则返回200 OK.
+●CreateModelMixin
+。提供create（request，*args，**kwargs）方法
+。创建新的模型实例（创建新的记录）
+。创建成功，则返回201 Created
+。如果请求参数有误，则返回400 Bad Request
+
+
 4.Concrete Generic Views
+
+●RetrieveAPIView
+。提供get方法
+。继承：RetrieveModelMixin、GenericAPIView
+●UpdateAlPIView
+。提供put和patch方法
+。继承：UpdateModelMixin、GenericAPIView
+●DestroyAPIView
+。提供delete方法
+。继承：DestoryModelMixin、GenericAPIView
+●ListAPIView
+。提供get方法
+。继承：ListModelMixin、GenericAPIView
+●CreateAPIView
+。提供post方法
+。继承：CreateModelMixin、GenericAPIView
+●ListCreateAPIView
+。提供post、get方法
+。继承：ListModelMixin、CreateModelMixin、GenericAPIView
+●RetrieveUpdateAPIView
+。提供get、put、patch方法
+。继承：RetrieveModelMixin、UpdateModelMixin、GenericAPIView
+●RetrieveDestroyAPlView
+。提供get、delete方法
+。继承：RetrieveModelMixin、DestroyModelMixin、GenericAPIView
+●RetrieveUpdateDestroyAPIView
+。提供get、put、patch、delete方法
+
+
+●痛点
+。两个类视图，不能合并
+。有相同的get方法
+。两个类视图所对应的url地址不一致
+
+
 5.ViewSet
+
+请求方法 动作 描述
+GET retrieve获取详情数据（单条
+GET list获取列表数据（多条
+POST create创建数据
+PUT update更新数据
+PATCH partial_update部分更新
+DELETE destroy. 删除数据.
+
+ViewSet类
+●继承ViewSetMixin和vieWs.APIView
+。ViewSetMixin支 持action动作
+●未提供get.object（）、get.serializer（）、queryset.serializer._class等
+
+GenericViewSet类
+●继承ViewSetMixin和generics.GenericAPIView
+。get.object（）、get_serializer（）、queryset、serializer._class等
+●在定义路由时，需要将请求方法与action动作进行绑定
+
+
+●继承ViewSetMixin和generics.GenericAPIView
+。get object（）、get.serializer（）、queryset.serializer._class等
+●在定义路由时，需要将请求方法与action动作进行绑定
+●使用Mixins类简化程序
+
+
+ModelViewSet类
+●继承ListModelMixin、RetrieveModelMixin、CreateModelMixin、UpdateModelMixin、
+DestoryModelMixin、GenericAPIVIew
+
+ReadOnlyModelViewSet类
+●继承ListModelMixin、RetrieveModelMixin、GenericAPIVIew
+
 6.action
+
+●使用action装饰器
+●methods
+。支持的请求方式
+。为列表.
+●detail
+。要处理的是否是详情资源对象（即是否通过url路径获取主键）
+。True 表示使用通过URL获取的主键对应的数据对象
+。False表示不使用URL获取主键
+
 7.router
+
+●可以使用router来自动生成路由配置
+●提供两种路由SimpleRouter和DefaultRouter
+。DefaultRouter会 多添加一一个默认的API根视图
+
 8.Exception
+
+DRF能自动处理以下异常：
+●APIException类或者子类
+●Http404
+●PermissionDenied
+
 六、生成API文档
+
+1.简介
+●生成API文档平台
+●自动生成测试代码
+●支持接口测试
+
+2.安装
+●coreapi（必须）
+●Pygments（可选）
+●Markdown（可选）
+
+3.使用coreapi
+●最新版的DRF（>3.10）中，需要添加如下配置
+```py
+REST_FRAMEWORK ={
+    #指定用于支持coreapi的Schema
+    'DEFALLT._SCHEMA__CLASS'：'rest._framework.schemas.coreapi.Auto'
+}
+
+
+from rest_fr amework.documentation import include_docs_ur1s
+from django.urls import path，include 
+
+urlpatterns = [
+    path（'docs/'，include_docs_ur1s（tit1e='测试平台接口文档'）），
+]
+```
+
+●添加注释
+。单一方法的视图
+■直接给视图类添加注释即可
+```py
+class ProjectsListView（ListAPIView）：
+"""
+返回所有项目信息
+"""
+```
+
+。多个方法的视图
+```py
+class ProjectsListCreateView（ListCreateAPIView）：
+"""
+get：返回所有项目信息
+post：新建项目
+"""
+```
+
+。视图集
+```py
+class ProjectsVi ewset（vi ewsets.Mode 1ViewSet）：
+    """
+    create：
+    创建项目
+    partial_update：
+    部分更新项目
+    destroy：
+    删除项目
+    1ist：
+    获取项日目列表数据
+    names：
+    获取所有项目名称
+    interfaces：
+    获取指定项目的所有接口数据
+
+    """
+```
+4.使用drf-yasg 
+●安装
+pip insta1l drf-yasg
+●添加到INSTALLED_APPS中
+```py
+INSTALLED_APPS = [
+    'drf_yasg'，
+]
+```
+
+●在全局路由文件urls.py文件中添加配置
+```py
+#from rest_framework import permi permissions
+from drf._yasg.views import get_.schema_view 
+from drf_yasg import openapi
+
+schema_.view = get_schema_.view（
+    openapi.Info（
+    title="Lemon API接11 文档平台",  #必传
+    defau1t__version='v1'，#必传
+    description="这是一个美轮美奂的接口文档"，terms_of_service="http://api.keyou.site",
+    contact=openapi.contact（emai1="keyou100@qq.com"），
+    license=openapi.License（name="BSD License"），
+    ），
+    pub1ic=True，
+    #permission_classes=（permissions.A11owAny，），#权限类
+）
+
+
+urlpatterns = [.
+    re_path(r ' Aswagger (?P <format>\. json|\. yaml)$',schema_view.without_ui(cache_timeout=0),name='schema-json'), 
+    path('swagger/', schema_view.with_ui(' swagger', cache_timeout=0,name='swagger-ui'), 
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='swagger-redoc'),
+]
+```
