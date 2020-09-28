@@ -56,7 +56,7 @@ Node节点结构:
 - Fluentd 日志收集服务
 
 ## 2. 核心组件
-### 2.1 Pod 容器组
+### 2.1 Pod (容器组)
 - Pod 也是一个容器，这个容器中装的是 Docker 创建的容器，Pod 用来封装容器的一个容器，Pod 是一个虚拟化分组；
 - Pod 相当于独立主机，可以封装一个或者多个容器(常规只推荐一个)
 - Pod 有自己的 IP 地址、主机名，相当于一台独立沙箱环境
@@ -96,38 +96,38 @@ Node节点结构:
 
 StatefulSet 保证 Pod 重新建立后，Hostname 不会发生变化，Pod 就可以通过 Hostname 来关联数据。
 
-### deployment 维持pod数量
-`kubectl run container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
-`kubectl get deployments`: 查看deployments
-`kubectl edit deployments pod_name`: 修改配置文件
-`replicas`: 配置文件中用来修改副本数
+### 2.5 deployment 维持pod数量
+- `kubectl run container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
+- `kubectl get deployments`: 查看deployments
+- `kubectl edit deployments pod_name`: 修改配置文件
+- `replicas`: 配置文件中用来修改副本数
 
-### service: 多个pod抽象为一个服务
+### 2.6 service: 多个pod抽象为一个服务
 kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod会自动进行负载均衡，分发。
 以上这个过程生成 service资源
 
-`kubectl expose depolyment pod --target-port 80 --type NodePort`: 创建service
-`kubectl get svc`: 获取services，可以查看服务的虚拟ip
+- `kubectl expose depolyment pod --target-port 80 --type NodePort`: 创建service
+- `kubectl get svc`: 获取services，可以查看服务的虚拟ip
 
-### 互相通信
+### 2.7 互相通信
 内部的dns会自动将ip与service名字绑定
 互相访问只要输入名字即可
 
-### ingress
+### 2.8 ingress
 虚拟ip映射到公网
 1. 获取配置文件 https://github.com/sunwu51/notebook/tree/master/19.07
-2. 创建ing-dep.yml文件粘贴
+2. 创建ing-dep.yml文件
 3. `kubectl apply -f ing-dep.yml` 创建
-4. 创建ing-config文件粘贴
-5.  `kubectl apply -f ing-config.yml`创建
+4. 创建ing-config 文件
+5. `kubectl apply -f ing-config.yml`创建
 6. 外界访问 ing-config中的
 
 ## 2. 常用命令
-`kubectl version`: 查看k8s的版本
-`kubectl cluster-info`: 查看master地址和版本
-`kubectl get pod`: 获取pod列表
-`kubectl get nodes`: 获取node节点信息
-`kubectl delete pods pod_name`: 删除pod
-`kubectl delete deployment deployment_name`: 删除deployment,会将所有的pod都删除
-`kubectl create -f xx.yaml`: 用配置文件创建deployment
+- `kubectl version`: 查看k8s的版本
+- `kubectl cluster-info`: 查看master地址和版本
+- `kubectl get pod`: 获取pod列表
+- `kubectl get nodes`: 获取node节点信息
+- `kubectl delete pods pod_name`: 删除pod
+- `kubectl delete deployment deployment_name`: 删除deployment,会将所有的pod都删除
+- `kubectl create -f xx.yaml`: 用配置文件创建deployment
 
