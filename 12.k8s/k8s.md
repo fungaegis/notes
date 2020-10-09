@@ -1,5 +1,5 @@
 参考资料
-1. https://www.jianshu.com/p/8d60ce1587e1
+1. http://docs.kubernetes.org.cn/
 2. 在线k8s：https://www.katacoda.com/
 
 # 1. 简介:

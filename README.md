@@ -4,7 +4,12 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 
 # ReadMe
 
-[![](https://img.shields.io/github/watchers/fungaegis/notes?label=watch&style=social)](https://github.com/fungaegis/notes/subscription) [![](https://img.shields.io/github/stars/fungaegis/notes?style=social)](https://github.com/fungaegis/notes) [![](https://img.shields.io/github/forks/fungaegis/notes?style=social)](https://github.com/fungaegis/notes/fork) [![](https://img.shields.io/github/followers/fungaegis?style=social)](https://github.com/fungaegis)
+[![](https://img.shields.io/github/watchers/fungaegis/notes?label=watch&style=social)](https://github.com/fungaegis/notes/subscription) 
+[![](https://img.shields.io/github/stars/fungaegis/notes?style=social)](https://github.com/fungaegis/notes) 
+[![](https://img.shields.io/github/forks/fungaegis/notes?style=social)](https://github.com/fungaegis/notes/fork) 
+[![](https://img.shields.io/github/followers/fungaegis?style=social)](https://github.com/fungaegis)
+
+
 
 本文档多为实用性笔记,按笔者自己学习和实践的道路整理归档相关的资料.
 
@@ -54,6 +59,7 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |http|图解http|待学习||
 |http|https通信过程|待复习||
 |http|web|待归档||
+|sonarqube|sonarqube|待补充|
 |其他|正则表达式|待复习||
 |其他|git|待复习||
 |其他|mianshi|待完善||
