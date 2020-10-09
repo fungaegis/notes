@@ -58,11 +58,9 @@ Node节点结构:
 
 - 命名空间: 是 k8s 中”组“的概念，提供同一服务的 pod 就应该被放置同一命名空间下
 
-## 2.1 命令
+## 1. 查看
 
-### 1. 查看
-
-#### 1. kubectl get 查看资源
+### 1. kubectl get 查看资源
 
 - `kubectl get pod`: 查看所有pod(容器组)
 
@@ -70,10 +68,14 @@ Node节点结构:
     - `-n`: 指定 命名空间(k8s 所有的 pod 都被放置在 kube-system 命名空间下)
     - `-o wide`: 查看更多的信息
 
-- `kubectl get get svc`: 查看服务(service)
-- `kubectl get get rs`: 查看副本控制器(ReplicaSet副本集)
-- `kubectl get get deploy`: 查看部署(Deployment)
-- `kubectl get get secret`: 查看秘钥(secret)
+- `kubectl get pod redis-master-fd5b55b33 -o yaml`
+    - `-o yaml`: pod的配置文件
+
+- `kubectl get node`: 查看集群节点
+- `kubectl get svc`: 查看服务(service)
+- `kubectl get rs`: 查看副本控制器(ReplicaSet副本集)
+- `kubectl get deploy`: 查看部署(Deployment)
+- `kubectl get secret`: 查看秘钥(secret)
 - ``: 持久化数据卷
 
 
@@ -105,12 +107,12 @@ prometheus-68f6cf7cfd-87sh2             1/1     Running   1          169d
 - RESTART：k8s 可以自动重启 pod，这一行就是标记了 pod 一共重启了多少次。
 - AGE：pod 一共存在了多长时间。
 
-#### 2. kubectl describe 查看详情
+### 2. kubectl describe 查看详情
 
 `-n`: 指定 命名空间
 
 - `kubectl describe secrets 秘钥名`: 查看指定秘钥详情 
-    - Example:`kubectl describe secrets admin-user-token-666wc -n kube-system` 查看dashboard token
+    - Example: `kubectl describe secrets admin-user-token-666wc -n kube-system` 查看dashboard token
 - `kubectl describe pod 容器组名`: 查看指定容器详情
     - Example: `kubectl describe pod redis-master-fd5b55b33-t95lr` 查看redis pod 的详情
 - ``: 
@@ -121,7 +123,7 @@ prometheus-68f6cf7cfd-87sh2             1/1     Running   1          169d
 - ``: 
 
 ```py
-root@devops40:~# kubectl describe pod redis-master-fd5b55b33-t95lr
+root@xixipc:~# kubectl describe pod redis-master-fd5b55b33-t95lr
 ------------------------------------------------------------------
 # 实例名字
 Name:           redis-master-fd5b55b33-t95lr
@@ -180,26 +182,134 @@ Events:          <none>
 ```
 - 当pod运行异常时,可以在describe末尾处的Events看到相关信息
 
-#### 3. kubectl logs 查看日志
+### 3. kubectl logs 查看日志
 `kubectl logs -f -n kube-system prometheus-68f6cf7cfd-87sh2`
+- `-f`: 持续查看日志
+- `-n`: 指定空间名
 
-### 2. 创建
+## 2. 创建
 
 - yaml文件创建
 
 - 简易创建
 
-#### 1. kubectl create 创建资源
+### 2.1 kubectl create 创建资源
+#### 2.1.1 yaml文件创建
+`kubectl create -f <yaml文件>`
+- 配置文件格式:
 
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-manual
+spec:
+  containers:
+  - image: xixi/redis
+    name: redis
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+```
 
-## 2.2 常用命令
+#### 2.1.2 简易创建
+`kubectl create <资源类型> <资源名>`
+
+输入`kubectl create` 会有帮助文档
+
+## 3. 帮助
+
+### 3.1 kubectl explain 查看配置解释
+
+- `kubectl explain <配置名>`
+
+- Example 查看services解释:`kubectl explain services`
+
+```
+root@xixipc:~# kubectl explain services
+KIND:     Service
+VERSION:  v1
+
+DESCRIPTION:
+     Service is a named abstraction of software service (for example, mysql)
+     consisting of local port (for example 3306) that the proxy listens on, and
+     the selector that determines which pods will answer requests sent through
+     the proxy.
+
+FIELDS:
+   apiVersion	<string>
+     APIVersion defines the versioned schema of this representation of an
+     object. Servers should convert recognized schemas to the latest internal
+     value, and may reject unrecognized values. More info:
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#resources
+
+   kind	<string>
+     Kind is a string value representing the REST resource this object
+     represents. Servers may infer this from the endpoint the client submits
+     requests to. Cannot be updated. In CamelCase. More info:
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds
+
+   metadata	<Object>
+     Standard object's metadata. More info:
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata
+
+   spec	<Object>
+     Spec defines the behavior of a service.
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+
+   status	<Object>
+     Most recently observed status of the service. Populated by the system.
+     Read-only. More info:
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+
+```
+
+- Example 查看services的status解释:`kubectl explain services.status`
+
+```
+root@devops40:~# kubectl explain services.status
+KIND:     Service
+VERSION:  v1
+
+RESOURCE: status <Object>
+
+DESCRIPTION:
+     Most recently observed status of the service. Populated by the system.
+     Read-only. More info:
+     https://git.k8s.io/community/contributors/devel/api-conventions.md#spec-and-status
+
+     ServiceStatus represents the current status of a service.
+
+FIELDS:
+   loadBalancer	<Object>
+     LoadBalancer contains the current status of the load-balancer, if one is
+     present.
+
+```
+
+## 4. 删除
+### 4.1 kubectl delete 删除
+- `kubectl delete <资源类型> <资源名>`
+    - `kubectl delete pod redis-4n2tg`: 删除指定pod
+    - `kubectl delete pod --all`: 删除全部pod
+    - `kubectl delete all --all`: 删除全部
+    - `kubectl delete deployment deployment_name`: 删除deployment,会将所有的pod都删除
+
+## 5. 编辑
+### 5.1 kubectl edit 编辑配置
+- `kubectl edit <资源类型> <资源名>`
+    - `kubectl edit pod redis-manual`
+
+tips: 无法修改运行中资源的名称和类型
+
+### 5.2 kubectl apply 应用配置
+- `kubectl apply -f <yaml文件>`: 
+    - k8s 在接受到这个配置文件后，会根据metadata中的元数据来查找目标资源，如果没有的话则直接新建，如果找到的话就依次比对配置文件之间有什么不同点，然后应用不同的配置。
+    - 例如可以将配置指定为远程配置
+
+## 6. 常用命令
 - `kubectl version`: 查看k8s的版本
 - `kubectl cluster-info`: 查看master地址和版本
-- `kubectl get pod`: 获取pod列表
-- `kubectl get nodes`: 获取node节点信息
-- `kubectl delete pods pod_name`: 删除pod
-- `kubectl delete deployment deployment_name`: 删除deployment,会将所有的pod都删除
-- `kubectl create -f xx.yaml`: 用配置文件创建deployment
 
 # 3. 核心组件
 ## 3.1 Pod (容器组)
@@ -243,10 +353,10 @@ Events:          <none>
 StatefulSet 保证 Pod 重新建立后，Hostname 不会发生变化，Pod 就可以通过 Hostname 来关联数据。
 
 ## 3.5 deployment 维持pod数量
-- `kubectl run container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
+- `kubectl run new_container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
 - `kubectl get deployments`: 查看deployments
 - `kubectl edit deployments pod_name`: 修改配置文件
-- `replicas`: 配置文件中用来修改副本数
+- 配置文件中`status.replicas`: 用来修改副本数(pod)
 
 ## 3.6 service: 多个pod抽象为一个服务
 kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod会自动进行负载均衡，分发。
