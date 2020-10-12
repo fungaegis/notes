@@ -36,6 +36,7 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |shell&linux|linux|待复习||
 |docker|docker|待复习||
 |vue|vue|待归档||
+|测试方法论|科普|待复习||
 |测试方法论|方法论|待补充||
 |测试方法论|管理|待复习||
 |django|django|待补充归档|待实践|
@@ -55,9 +56,9 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |redis|redis|待复习||
 |jenkins|操作|待补充||
 |jenkins|pipeline|待学习||
-|http|知识点|待完善||
-|http|图解http|待学习||
-|http|https通信过程|待复习||
+|http|http知识点|待复习||
+|http|图解http|待学习|暂缓|
+|sonarqube|sonarqube|待学习|
 |其他|正则表达式|待复习||
 |其他|git|待复习||
 |其他|mianshi|待完善||
