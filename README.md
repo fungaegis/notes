@@ -54,11 +54,10 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |devops|方法论|待完善||
 |devops|工具链|待补充||
 |redis|redis|待复习||
-|jenkins|操作|待补充||
-|jenkins|pipeline|待学习||
+|jenkins|jenkins|待补充||
 |http|http知识点|待复习||
 |http|图解http|待学习|暂缓|
-|sonarqube|sonarqube|待学习|
+|sonarqube|sonarqube|待完善|
 |其他|正则表达式|待复习||
 |其他|git|待复习||
 |其他|mianshi|待完善||
