@@ -35,7 +35,7 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |shell&linux|shell|已归档||
 |shell&linux|linux|已归档||
 |docker|docker|已归档||
-|vue|vue|待归档||
+|vue|vue|待完善||
 |测试方法论|科普|已归档||
 |测试方法论|方法论|待补充||
 |测试方法论|管理|已归档||
