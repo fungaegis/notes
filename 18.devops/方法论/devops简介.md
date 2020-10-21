@@ -40,6 +40,7 @@ Continuous Delivery (CD) 持续交付是持续集成的延伸，将集成后的�
 
 ![](./images/CD2.webp)
 2. DevOps 与 CICD的区别及联系
+
 DevOps是CICD思想的延伸，CICD是DevOps的基础核心，如果没有CICD自动化的工具和流程，DevOps是没有意义的。
 
 当然如何理解DevOps和CICD，可能有争议，我认为只要在团队内部达成一致就可以了
