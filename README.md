@@ -67,9 +67,6 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 
 |项目|子项目|进度|备注|
 |-|-|-|-|
-|django|django|待完善|待实践|
-|django|drf|待完善|待实践|
-|vue|vue|待完善||
 |gunicorn|gunicorn|待学习||
 |nginx|nginx|待完善|待实践|
 |k8s|k8s|待完善|待实践|
@@ -78,6 +75,9 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |自动化|web自动化|待完善|待实践分布式多容器|
 |自动化|app自动化|待完善|待实践分布式多容器|
 |自动化|api自动化|待完善||
+|django|django|待完善|待实践|
+|django|drf|待完善|待实践|
+|vue|vue|待完善||
 |flask|知识点|待完善|只归档纯后端|
 |其他|mianshi|待完善||
 |性能|jmeter|待完善|待实践|
