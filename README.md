@@ -87,3 +87,7 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |测试方法论|方法论|待补充||
 |http|图解http|待学习|暂缓|
 
+
+备忘录：
+- https://studygolang.com/articles/27439?fr=sidebar： Artifactory集群作为文件共享中心
+- jenkins pipeline share library 完善
