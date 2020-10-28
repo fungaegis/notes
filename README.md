@@ -62,12 +62,10 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 |其他|git|已归档||
 |其他|mianshi|待完善||
 
-
 ---
 
 |项目|子项目|进度|备注|
 |-|-|-|-|
-|gunicorn|gunicorn|待学习||
 |nginx|nginx|待完善|待实践|
 |k8s|k8s|待完善|待实践|
 |测试框架|unittest|待完善||
@@ -91,3 +89,5 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 备忘录：
 - https://studygolang.com/articles/27439?fr=sidebar： Artifactory集群作为文件共享中心
 - jenkins pipeline share library 完善
+- https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/
+- https://www.bilibili.com/video/BV1GT4y1A756?p=4
