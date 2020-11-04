@@ -240,9 +240,15 @@ spec:
 ```
 
 #### 2.1.2 简易创建
-`kubectl create <资源类型> <资源名>`
+- `kubectl create <资源类型> <资源名>`
+- `kubectl create` 会有帮助文档
 
-输入`kubectl create` 会有帮助文档
+ex:
+- `kubectl create deployment nginx --image=nginx`: 拉取nginx并运行
+- `kubectl expose deployment nginx --port=80 --type=NodePort`: 对外暴露80端口
+- `kubectl get pod,svc`: 查看pod和service
+
+
 
 ## 3. 帮助
 
@@ -340,9 +346,10 @@ tips: 无法修改运行中资源的名称和类型
 
 # 3. 核心组件
 ## 3.1 Pod (容器组)
-- Pod 也是一个容器，这个容器中装的是 Docker 创建的容器，Pod 用来封装容器的一个容器，Pod 是一个虚拟化分组；
+- Pod 也是一个容器，这个容器中装的是 Docker 创建的容器，Pod 用来封装容器的一个容器，Pod 是一个虚拟化分组；最小部署单位
 - Pod 相当于独立主机，可以封装一个或者多个容器(常规只推荐一个)
-- Pod 有自己的 IP 地址、主机名，相当于一台独立沙箱环境
+- Pod 有自己的 IP 地址、主机名，相当于一台独立沙箱环境；同一Pod内 容器共享网络
+- Pod 生命周期是短暂的
 
 - Web 服务集群如何实现？
     - 实现服务集群：只需要复制多方 Pod 的副本即可，这也是 K8s 管理的先进之处，K8s 如果继续扩容，只需要控制 Pod 的数量即可，缩容道理类似。
@@ -361,12 +368,17 @@ tips: 无法修改运行中资源的名称和类型
     - ReplicaSet 不支持滚动更新，Deployment 对象支持滚动更新，通常和 ReplicaSet 一起使用；
     - Deployment 管理 ReplicaSet，RS 重新建立新的 RS，创建新的 Pod
 
+- `kubectl run new_container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
+- `kubectl get deployments`: 查看deployments
+- `kubectl edit deployments pod_name`: 修改配置文件
+- 配置文件中`status.replicas`: 用来修改副本数(pod)
+
 ## 3.4 StatefulSet
 - 对于 K8s 来说，不能使用 Deployment 部署有状态服务
 - 对于有状态服务的部署，使用 StatefulSet 进行有状态服务的部署。
 
 - 什么是有状态服务？
-    1. 有实时的数据需要存储
+    1. 有实时的数据需要存储，指定网络等
     2. 有状态服务集群中，把某一个服务抽离出去，一段时间后再加入机器网络，如果集群网络无法使用
 什么是无状态服务？
 
@@ -379,13 +391,15 @@ tips: 无法修改运行中资源的名称和类型
 
 StatefulSet 保证 Pod 重新建立后，Hostname 不会发生变化，Pod 就可以通过 Hostname 来关联数据。
 
-## 3.5 deployment 维持pod数量
-- `kubectl run new_container_name --image image_name --port 80 --replicas=2`: 运行镜像并维持2个pod
-- `kubectl get deployments`: 查看deployments
-- `kubectl edit deployments pod_name`: 修改配置文件
-- 配置文件中`status.replicas`: 用来修改副本数(pod)
+## 3.5 controller
 
-## 3.6 service: 多个pod抽象为一个服务
+- 确保预期的pod副本数量
+- 确保所有的node运行同一个pod
+- 一次性任务/定时任务
+
+## 3.6 service 服务
+- 定义一组pod的访问规则(多个pod抽象为一个服务)
+
 kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod会自动进行负载均衡，分发。
 以上这个过程生成 service资源
 
@@ -407,7 +421,50 @@ kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod
 
 
 
+
 # 4. 搭建服务
+![](./images/平台规划.png)
+## 1. 搭建k8s环境平台规划
+1. 单master集群
+2. 多master集群
+  - 需要负载均衡
+
+
+## 2. 服务器硬件配置要求
+最低配置: 
+- master: 2核4G内存20G硬盘
+- node: 4核8G内存40硬盘
+
+## 3. 搭建k8s集群部署方式
+
+### 1. kubeadm
+官方地址：https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/
+
+简介：kubeadm 是官方社区推出的一个用于快速部署kubernetes 集群的工具，这个工具能通过两条指令完成一个kubernetes 集群的部署
+
+[kubeadm快速搭建详细步骤](.\使用kubeadm快速部署一个K8s集群.md)
+
+1. 对各节点进行初始化操作
+2. 各节点安装docker kubelet kubeadm kubectl
+3. master节点执行kubeadm init进行初始化
+4. node节点执行kubeadm join把当前节点添加到集群
+5. 配置网络插件
+
+### 2. 二进制手动部署
+从github 下载发行版的二进制包，手动部署每个组件，组成Kubernetes 集群。
+
+1. 服务器初始化(与上方初始化操作一致)
+2. 部署Etcd集群
+3. 安装docker
+4. 部署master节点
+5. 部署worker节点
+
+
+```
+
+
+
+```
 
 
 # 5. 监控服务
