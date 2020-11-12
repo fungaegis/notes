@@ -106,4 +106,10 @@ k8s解决方案:
 https://www.cnblogs.com/superhin/p/11478007.html
 
 
+读书记录:(更多是实践性的)
+1. Docker —— 从入门到实践
+2. 《Flask Web开发：基于Python的Web应用开发实战（第2版）》 (狗书)
+3. Python核心编程(第3版)
+4. SQL必知必会（第4版）
+5. 跟老齐学python：django实战(2版)
 
