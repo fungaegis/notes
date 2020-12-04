@@ -65,12 +65,12 @@ k8s是一(master)对多(slave)的分布式架构
 
 Master节点结构:(主控节点)
 - apiserver 网关: 集群统一入口，以restful方式提供服务，交给etcd存储
-- scheduler 调度器: 对集群内部的资源（node）进行调度
-- controller-manager 控制器管理: 负责管理控制器
+- Scheduler 调度器: 对集群内部的资源（node）进行调度
+- Controller MangerServer 控制器管理: 负责管理控制器
   - 处理集群中常规后台任务，一个资源对应一个控制器
-- etcd 存储系统：保存集群相关数据
+- ETCD 存储系统：保存集群相关数据
 
-Node节点结构:(工作节点)
+Worker节点结构:(工作节点)
 - kubelet: 管理节点上的资源操作指令(Node上的Pod，包括创建、修改、监控、删除等)
 - kube-proxy 网络代理(虚拟网卡): 服务间(Pod)负载均衡
 - Pod: k8s 管理的基本单元（最小单元）
@@ -433,11 +433,11 @@ kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod
 ## 2. 服务器硬件配置要求
 最低配置: 
 - master: 2核4G内存20G硬盘
-- node: 4核8G内存40硬盘
+- worker: 4核8G内存40硬盘
 
 ## 3. 搭建k8s集群部署方式
 
-### 1. kubeadm
+### 1. kubeadm 快速搭建
 官方地址：https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm/
 
 简介：kubeadm 是官方社区推出的一个用于快速部署kubernetes 集群的工具，这个工具能通过两条指令完成一个kubernetes 集群的部署
@@ -454,12 +454,13 @@ kube-proxy 整个集群层面抽象出一个虚拟交换机，如果有多个pod
 从github 下载发行版的二进制包，手动部署每个组件，组成Kubernetes 集群。
 
 1. 服务器初始化(与上方初始化操作一致)
-2. 部署Etcd集群
-3. 安装docker
-4. 部署master节点
-5. 部署worker节点
+2. 为etcd和apiserver自签证书
+3. 部署Etcd集群
+4. 部署master组件(kube-apiserver, kube-controller-manager, kube-scheduler, etcd)
+5. 部署worker组件(kubelet, kube-proxy, docker, etcd)
+7. 部署集群网络
 
-
+[二进制手动部署详细步骤](.\使用kubeadm搭建高可用的K8s集群.md)
 ```
 
 
