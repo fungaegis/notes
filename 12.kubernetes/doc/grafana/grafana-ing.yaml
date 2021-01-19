@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Ingress
+metadata:
+   name: grafana
+   namespace: kube-system
+spec:
+   rules:
+   - host: k8s.grafana
+     http:
+       paths:
+       - path: /
+         backend:
+          serviceName: grafana
+          servicePort: 3000
