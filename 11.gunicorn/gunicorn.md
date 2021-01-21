@@ -252,7 +252,7 @@ redirect_stderr=true
 ### 自定义gunicorn服务
 - `gunicorn.app.base.BaseApplication`: 继承
 
-ex:
+e.g. :
 ```py
 import multiprocessing
 

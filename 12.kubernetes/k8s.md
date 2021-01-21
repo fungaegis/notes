@@ -91,7 +91,7 @@ kubectl命令语法: `kubectl [COMMAND] [TYPE] [NAME] [FLAGS]`
 - NAME: 资源名称,大小写敏感,如果不写则显示全部
 - FLAGS: 可选参数
 
-ex:
+e.g. :
 `kubectl get node xx`: 查看名为xx的node
 
 获取kubectl帮助: `kubectl --help`
@@ -187,7 +187,7 @@ ex:
 - `kubectl get secret`: 查看秘钥(secret)
 - `kubectl get pod,svc`: 可以进行组合查询(一次性给出2个的结果)
 ----
-ex:
+e.g. :
 ```py
 root@xixi:~# kubectl get pod -n kube-system
 --------------------------------------------------------------------------
@@ -322,7 +322,7 @@ spec:
 - `kubectl create <资源类型> <资源名>`
 - `kubectl create` 会有帮助文档
 
-ex:
+e.g. :
 - `kubectl create deployment nginx --image=nginx`: 拉取nginx并运行
 - `kubectl expose deployment nginx --port=80 --type=NodePort`: 对外暴露80端口
 - `kubectl get pod,svc`: 查看pod和service
@@ -376,7 +376,7 @@ FIELDS:
 
 ```
 
-- Ex: 查看services的status解释:`kubectl explain services.status`
+- e.g.: 查看services的status解释:`kubectl explain services.status`
 
 ```
 root@devops40:~# kubectl explain services.status
@@ -572,7 +572,7 @@ spec:
 
 ### 2.生成&获取 配置文件
 获取已有配置文件: `kubectl get 资源类型 资源名 -o yaml`
-- ex:`kubectl get po nginx -o yaml`
+- e.g.:`kubectl get po nginx -o yaml`
 
 生成配置文件: `kubectl create deployment web --image=nginx -o yaml --dry-run > hello.yaml`: 试运行一个部署并重定向输出
 - `--dry-run`: 尝试运行,并不会真正的创建部署
@@ -823,7 +823,7 @@ sepc:
   - Lt：label的值小于某个值（字符串比较）
 
 
-ex:
+e.g. :
 1. pod可以被调度到标签key为`kubernetes.io/e2e-az-name`，值为“e2e-az1”或“e2e-az2”的节点。
 2. 另外，在满足该条件的节点中，优先使用具有`another-node-label-key`标签，且值为`another-node-label-value`的节点。
 ```yml
@@ -865,7 +865,7 @@ Taint 污点：节点不做普通分配调度，是节点属性
 
 1. 查看污点情况: `kubectl describe node k8smaster | grep Taint`
 2. 添加节点污点: `kubectl taint node [node] key=value:污点的三个值`
-    - ex: `kubectl taint node k8snode1 env_role=yes:NoSchedule`
+    - e.g.: `kubectl taint node k8snode1 env_role=yes:NoSchedule`
 3. 删除节点污点: `kubectl taint node k8snode1 env_role:NoSchedule-`
 
 ### 4.restartPolicy(重启策略)
@@ -908,7 +908,7 @@ Probe支持以下三种检查方式
 - `exec`：执行Shell命令返回状态码是0为成功
 - `tcpSocket`：发起TCP socket建立成功
 
-ex: exec
+e.g. : exec
 ```yml
 apiVersion: v1 
 kind: Pod 
@@ -930,7 +930,7 @@ sepc:
         periodSeconds: 5  # 间歇期
         timeoutSeconds: 10  # 超时时间
 ```
-ex: httpGet
+e.g. : httpGet
 ```yml
 apiVersion: v1
 kind: Pod
@@ -955,7 +955,7 @@ spec:
       periodSeconds: 3
       timeoutSeconds: 10
 ```
-ex: tcpSocket
+e.g. : tcpSocket
 ```yml
 apiVersion: v1
 kind: Pod
