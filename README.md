@@ -88,6 +88,8 @@ description: 在测试开发 devops 质量保证 工程效能领域踩坑中
 - https://studygolang.com/articles/27439?fr=sidebar： Artifactory集群作为文件共享中心
 - https://testerhome.com/articles/22085
 - https://www.cnblogs.com/superhin/p/11478007.html
+- https://blog.csdn.net/han949417140/article/details/109215590
+- https://www.cnblogs.com/shawhe/p/11313633.html
 
 
 读书记录:(更多是实践性的)
