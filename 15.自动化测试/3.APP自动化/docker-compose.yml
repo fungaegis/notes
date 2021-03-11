@@ -9,29 +9,29 @@ services:
     ports:
       - 5555:4444
 
-
-  real_device:
-    image: budtmo/docker-android-real-device
-    networks:
-      - appium
-    privileged: true
-    depends_on:
-      - selenium_hub
-    ports:
-      - 6080
-    volumes:
-      - ./video-real-device:/tmp/video
-      - /dev/bus/usb:/dev/bus/usb
-      - ~/.android:/root/.android
-    environment:
-      - CONNECT_TO_GRID=true
-      - APPIUM=true
-      - SELENIUM_HOST=selenium_hub
-      - AUTO_RECORD=true
-      - BROWSER_NAME=chrome
+# 不推荐使用 连接物理机很麻烦
+  # real_device:
+  #   image: budtmo/docker-android-real-device
+  #   networks:
+  #     - appium
+  #   privileged: true
+  #   depends_on:
+  #     - selenium_hub
+  #   ports:
+  #     - 6080
+  #   volumes:
+  #     - ./video-real-device:/tmp/video
+  #     - /dev/bus/usb:/dev/bus/usb
+  #     - ~/.android:/root/.android
+  #   environment:
+  #     - CONNECT_TO_GRID=true
+  #     - APPIUM=true
+  #     - SELENIUM_HOST=selenium_hub
+  #     - AUTO_RECORD=true
+  #     - BROWSER_NAME=chrome
 
   # Using Appium Docker Android  
-  real_appium:
+  real_device:
     image: appium/appium
     depends_on:
       - selenium_hub
@@ -47,30 +47,31 @@ services:
     environment:
       - CONNECT_TO_GRID=true
       - SELENIUM_HOST=selenium_hub
-      - ANDROID_DEVICES=172.16.16.67:5555
+      - ANDROID_DEVICES=172.16.16.67:5555,172.16.10.40:5555
       - REMOTE_ADB=true
 
   # Docker-Android for Android application testing
-  # nexus_7.1.1:
-  #   image: budtmo/docker-android-x86-7.1.1
-  #   privileged: true
-  #   # Increase scale number if needed
-
-  #   depends_on:
-  #     - selenium_hub
-  #     - real_device
-  #   ports:
-  #     - 6080
-  #   # Change path of apk that you want to test. I use sample_apk that I provide in folder "example"
-  #   volumes:
-  #     - ./:/root/tmp
-  #     - ./video-nexus_7.1.1:/tmp/video
-  #   environment:
-  #     - DEVICE=Nexus 5
-  #     - CONNECT_TO_GRID=true
-  #     - APPIUM=true
-  #     - SELENIUM_HOST=selenium_hub
-  #     - AUTO_RECORD=true
+  nexus_7.1.1:
+    image: budtmo/docker-android-x86-7.1.1
+    privileged: true
+    # Increase scale number if needed
+    networks:
+      - appium
+    depends_on:
+      - selenium_hub
+      - real_device
+    ports:
+      - 6080
+    # Change path of apk that you want to test. I use sample_apk that I provide in folder "example"
+    volumes:
+      - ./:/root/tmp
+      - ./video-nexus_7.1.1:/tmp/video
+    environment:
+      - DEVICE=Nexus 5
+      - CONNECT_TO_GRID=true
+      - APPIUM=true
+      - SELENIUM_HOST=selenium_hub
+      - AUTO_RECORD=true
 
   # Docker-Android for mobile website testing with chrome browser
   # Chrome browser exists only for version 7.0 and 7.1.1
