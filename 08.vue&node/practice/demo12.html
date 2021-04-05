@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 全局组件 局部组件 组件传值 传值限制
+
+        // 局部组件
+        const counter = {
+            props: ["name", "age", "height", "popup"],
+            data(){
+                return {
+                    count: 0
+                }
+            },
+            methods:{
+                counter(){
+                    this.count += 1;
+                }
+            },
+            template: `
+                <div>{{ count }}</div>
+                <button @click.stop="counter">点我</button>
+                <p>姓名:{{name}}</p> 
+                <p>[年龄:{{age}} 数据类型: {{typeof age}}]</p>
+                <p>[身高:{{height}} 数据类型: {{typeof height}}]</p>
+                <button @click="popup">触发根组件方法</button>
+            `
+        }
+        // 局部组件
+        const myBtn = {
+            template: `
+                <button>点我无效</button>
+            `
+        }
+
+        const XiaoHong = {
+            // 对传参的数据类型做校验
+            props: {
+                A: String,
+                B: Boolean,
+                C: Array,
+                D: Object,
+                E: Function,
+                F: Symbol
+            },
+            template: `
+                <div> {{ A }} </div>
+                <div> {{ B }} </div>
+                <div> {{ C }} </div>
+            `
+        }
+
+        const XiaoHuang = {
+            props: {
+                A: {
+                    type: String,
+                    required: true  // 必传参数
+                },
+                B: {
+                    type: Array,
+                    default: [1, 2, 3, 4]
+                },
+                C: {
+                    type: Boolean,
+                    validator: (value)=>{
+                        return value === true
+                    }
+                }
+            },
+            template: `
+                <div>{{A}}</div>
+                <div>{{B}}</div>
+                <div>{{C}}</div>
+            `
+        }
+
+        const app = Vue.createApp({
+            // 局部组件注册
+            components: {counter, btn: myBtn, "xiao-hong": XiaoHong, "xiao-huang": XiaoHuang},
+            data(){
+                return {
+                    num: 12,
+                    name: "小明",
+                    age: 30,
+                    popup: ()=>{
+                        alert("这里是根组件的方法")
+                    },
+                    aString: "我是字符串",
+                    aRequire: "必填"
+                }
+            },
+            template: `
+                <div>
+                    <website />
+                    <titleData :num="num" />
+                    <counter :name="name" :age="age" height=200 :popup="popup" />
+                    <btn />
+                    <hr>
+                    <xiao-hong :A="aString" :B=true :C="[1, 2, 3]" />
+                    <hr>
+                    <xiao-huang :A="aRequire" :C=true />
+                </div>
+            `
+        })
+        app.component("website", {
+            data(){
+                return {
+                    website: "www.baidu.com"
+                }
+            },
+            template: `
+                <div>{{ website }}</div>
+            `
+        })
+        app.component("titleData", {
+            data(){
+                return {
+                    data: "这是我的第" + this.num + "次demo"
+                }   
+            },
+            props: ["num"],
+            template: `
+                <div>{{ data }}</div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 事件修饰符
+        const app = Vue.createApp({
+            data(){
+                return {
+                    top : 1,
+                    inData: 1
+                }
+            },
+            methods: {
+                addTop(){
+                    this.top = this.top += 2;
+                    console.log("外层数据")
+                },
+                addInData(){
+                    this.inData = this.inData += 1;
+                    console.log("里层数据")
+                },
+                popup(msg){
+                    alert(msg);
+                }
+            },
+            template: `
+                <div>
+                    <p>我是外层事件 {{ top }}</p>
+                    <p>我是内部事件 {{ inData }}</p>
+                    <hr>
+                    <div @click="addTop">
+                        瞧瞧控制台?向上冒泡
+                        <button @click="addInData">向上冒泡</button>
+                    </div>
+                    <hr>
+                    <div @click="addTop">
+                        瞧瞧我?只运行内部事件停止向上冒泡
+                        <button @click.stop="addInData">只运行内部事件</button>
+                    </div>
+                    <hr>
+                    <div @click.self="addTop">
+                        瞧瞧我?只运行我自己,不受冒泡影响
+                        <button @click="addInData">只运行我自己</button>
+                    </div>
+                    <hr>
+                    <div @click.capture="addTop">
+                        瞧瞧控制台?从外到内运行
+                        <button @click.stop="addInData">从外到内运行</button>
+                    </div>
+                    <hr>
+                    <div @click="addTop">
+                        瞧瞧我?我只运行一次,冒泡不停止
+                        <button @click.once="addInData">只运行一次</button>
+                    </div>
+                    <hr>
+                    键盘修饰符enter: <input @keydown.enter="popup('触发enter,键盘修饰符')" />
+                    <hr>
+                    <button @mousedown.middle="popup('触发中间,鼠标修饰符')">鼠标修饰符, 用中间点我吧</button>
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

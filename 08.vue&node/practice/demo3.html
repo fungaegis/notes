@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 生命周期钩子
+        const app = Vue.createApp({
+            data(){
+                return {
+                    names: [],
+                    inputValue: "",
+                    btnIsShow: false
+                }
+            },
+            methods: {
+                addName(){
+                    if(this.inputValue){
+                        this.names.push(this.inputValue);
+                        this.inputValue = "";
+                    }else{
+                        alert("请输入姓名后再提交!")
+                    }
+                },
+                updateShow(){
+                    this.btnIsShow = !this.btnIsShow;
+                }
+            },
+            template: `
+                <div>
+                    <button @click="updateShow">需要自定义选择吗?</button>
+                    <div v-if="btnIsShow">
+                        <input v-model="inputValue">
+                        <button @click="addName">添加</button>
+                    </div>
+                    <ul>
+                        <my-list v-for="(item, index) of names" :index="index" :item="item"></my-list>
+                    </ul>
+                </div>
+            `,
+            beforeCreate(){ // 在实例生成之前会自动执行函数
+                console.log("beforeCreate")
+            },
+            created(){ // 在实例生成之后会自动执行函数
+                console.log("created")
+            },
+            beforeMount(){ // 在模板渲染完成之前执行的函数
+                console.log("beforeMount")
+            },
+            mounted(){ // 实例挂载到DOM树之后(渲染完成后执行)
+                console.log("mounted")
+            },
+            beforeUpdate(){
+                console.log("beforeUpdate")
+            },
+            updated(){
+                console.log("updated")
+            },
+            // 通过 app.unmount() 方法可以将实例销毁
+            beforeUnmount(){
+                console.log("beforeUnmount")
+            },
+            unmounted(){
+                console.log("beforeUnmount")
+            }
+        })
+        app.component("my-list", {
+            props: ["index", "item"],  // 声明需要传参的组件
+            template:  `<li>[{{index}}]- {{item}}</li>`
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

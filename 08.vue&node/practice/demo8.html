@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // v-for 及 v-for嵌套v-if
+        const app = Vue.createApp({
+            data(){
+                return {
+                    objectData: {
+                        A: 1,
+                        B: 2,
+                        C: 3
+                    },
+                    arrayData: ["G", "F", "Y"]
+                }
+            },
+            template: `
+                <div>
+                    <p v-for="(value, key, index) in objectData"> 我是对象: [{{ index }}] {{ key }}: {{ value }}</p>
+                    <p v-for="(item, index) of arrayData">我是数组: [{{ index }}] {{ item }}</p>
+                    <div>
+                        <span v-for="count in 10"> {{count}} </span>
+                    </div>
+                    <div>
+                        <p> for循环嵌套if, 只显示B</p>
+                        <ul>
+                            <template v-for="(value, key, index) in objectData">
+                            <li v-if="key === 'B'">[{{index}}]-{{ value }}</li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

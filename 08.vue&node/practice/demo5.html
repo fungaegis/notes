@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 计算属性 侦听器
+        const app = Vue.createApp({
+            data(){
+                return {
+                    value: "",
+                    price: 20,
+                    rise: 0,
+                    history: 0
+                }
+            },
+            methods: {
+                calculate(){
+                    return Date.now()
+                },
+                risePrice(){
+                    this.price = this.price += 10;
+                }
+            },
+            computed: {
+                total(){
+                    return Date.now()
+                }
+            },
+            watch:{
+                price(current, prev){
+                    console.log("当前变化的值", current);
+                    console.log("变化前的值", prev);
+                    this.rise = current - prev;
+                    this.history += this.rise;
+                }
+
+            },
+            template: `
+                <div>
+                    <div>
+                        <input v-model="value">
+                        修改值{{ value }}
+                        <p>methods: {{ calculate() }}</p>
+                        <p>computed: {{ total }}</p>
+                    </div>
+                    <div>
+                        <p>商品价格: {{ price }}</p>
+                        <p>相较上次涨价: {{ rise }}</p>
+                        <p>历史涨价: {{ history }}</p>
+                        <button @click="risePrice">Rise</button>
+                    </div>
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

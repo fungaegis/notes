@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // css样式绑定 子组件样式绑定
+        const app = Vue.createApp({
+            data(){
+                return {
+                    classObject: {red: true, greenBackGround: true, size: true},
+                    classArray: ["red", "greenBackGround", {size: true}],
+                    classString: "size",
+                    styleObject: {color: "green", "font-size": "50px"}
+                }
+            },
+            methods:{
+                updateStyle(){
+                    this.classObject.size = !this.classObject.size;
+                    let res = this.classArray.indexOf("greenBackGround")
+                    console.log(res)
+                    if (res >= 1){
+                        this.classArray.splice(res, 1);
+                        console.log(this.classArray)
+                    }else{
+                        this.classArray.push("greenBackGround");
+                        console.log(this.classArray)
+                    }
+                }
+            },
+            template: `
+                <div>
+                    <p :class="classObject"> 组合显示 </p>
+                    <p :class="classArray"> 组合显示 </p>
+                    <p :class="classString"> 组合显示 </p>
+                    <button @click="updateStyle">你点我试试?</button>
+
+                    <p :style="styleObject">我绑定了style</p>
+
+                    <my-component style="background: orange" />
+                </div>
+            `
+        })
+        app.component("my-component", {
+            template: `
+                <div>
+                    <div class="red">我是红</div>
+                    <div style="color: green">我是绿</div>    
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+    <style>
+        .red{color: red;}
+        .greenBackGround{background-color: goldenrod;}
+        .size{font-size: 50px;}
+    </style>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // v-model 双向数据绑定
+        const app = Vue.createApp({
+            data(){
+                return {
+                    arrayData : [],
+                    Data: "",
+                    inputValue: "",
+                    value: "请点击我看看",
+                    lazyData: "",
+                    numberData: "",
+                    trimData: ""
+                }
+            },
+            template: `
+                <div>
+                    双向数据绑定{{ inputValue }}
+                    <input v-model="inputValue" />
+                    <textarea v-model="inputValue" />
+                    <hr>
+                    <div>
+                        <!-- 初始化时显示的为value中的值 之后会根据状态显示值 -->
+                        <p>通过选中与未选中判断展示内容:</p> [{{ value }}]
+                        <input type="checkbox" v-model="value" true-value="勾选我啦" false-value="还没勾选我吗?">
+                        <hr>
+                        <p>多选框 {{arrayData}}</p>
+                        A<input type="checkbox" v-model="arrayData" value="A" />
+                        B<input type="checkbox" v-model="arrayData" value="B" />
+                        C<input type="checkbox" v-model="arrayData" value="C" />
+                    </div>
+                        
+                    <div>
+                        <p>单选框 {{Data}}</p>
+                        G<input type="radio" v-model="Data" value="G" />
+                        F<input type="radio" v-model="Data" value="F" />
+                        H<input type="radio" v-model="Data" value="H" />
+                    </div>
+                    <div>
+                        修饰符 lazy trim number
+                        <p>懒加载: {{lazyData}}</p>
+                        <input v-model.lazy="lazyData">
+                        <p>数字类型: {{typeof numberData}}- 值:{{ numberData }}</p>
+                        <input v-model.number="numberData">
+                        <p>去除前后端空格: {{trimData}}</p>
+                        <input v-model.trim="trimData">
+                    </div>
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>

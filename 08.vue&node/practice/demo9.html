@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 传入event对象 事件带参 多函数
+        const app = Vue.createApp({
+            data(){
+                return {
+                    count : 1
+                }
+            },
+            methods: {
+                // 未指定传参则默认传入event对象
+                addData(event){
+                    console.log(event);
+                    console.log(event.target);
+                },
+                // 如果要传入event对象,在调用时`$event`
+                paramFunc(num, event){
+                    this.count += num;
+                    console.log(event.target);
+                },
+                // 多函数必须都要加括号
+                multipleFunc(){
+                    alert("multiple function");
+                }
+            },
+            template: `
+                <div>
+                    <p>{{ count }}</p>
+                    <button @click="addData">默认传入事件</button>
+                    <button @click="paramFunc(5, $event)">带参传入</button>
+                    <button @click="paramFunc(3, $event), multipleFunc()">多事件</button>
+                </div>
+            `
+        })
+        const vm = app.mount("#app")
+    </script>
+</html>
