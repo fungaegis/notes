@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 动态组件 及 状态保存(缓存)
+
+        const strCom = {
+            template: `<p>我是个子组件呀</p>`
+        }
+
+        const inputCom = {
+            template: "<input  />"
+        }
+
+        const app = Vue.createApp({
+            components: {strCom, inputCom},
+            data(){ // 父组件使用父组件作用域
+                return {
+                    showData: "strCom"
+                }
+            },
+            methods: {
+                switchShow(){
+                    this.showData = this.showData === "strCom"?"inputCom":"strCom"
+                }
+            },
+            template: `
+                <div>
+                    <keep-alive>
+                    <component :is="showData" />
+                    </keep-alive>
+                    <button @click="switchShow">切换组件</button>
+                </div>
+            `
+        })
+
+        const vm = app.mount("#app")
+    </script>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // slot插槽
+
+        // 最普通的插槽
+        const slot1 = {
+            template: `
+                <div>
+                    <p>这里是第一行</p>
+                    <slot></slot>
+                    <p>这里是第二行</p>
+                </div>
+            `
+        }
+
+        const B = {
+            template: "<div> 我是子组件呀 </div>"
+        }
+
+        const C = {
+            data(){ // 子组件使用子组件作用域
+                return {
+                    name: "我是小红呀"
+                }
+            },
+            template: `
+                <div> 
+                    <p>子组件作用域 [{{ name }}]</p> 
+                    <p><slot></slot></p> 
+                </div>
+            `
+        }
+
+        // 默认插槽
+        const defaultSolt = {
+            template: `
+            <div>
+                <slot> <p style="color: red"> 我是默认值 </p>  </slot>    
+            </div>
+            `
+        }
+
+        // 命名插槽
+        const nameSolt = {
+            template: `
+            <p>我是A</p>
+            <p><slot name="A"></slot></p>
+            <p>我是B</p>
+            <p><slot name="B"></slot></p>
+            <p>我是C</p>
+            <p><slot name="C"></slot></p>
+            <p>我是D</p>
+            `
+        }
+
+        // 作用域插槽
+        const listSolt = {
+            data(){
+                return {
+                    list: ["小明", "小黄", "小黑"]
+                }
+            },
+            template: `
+            <div>
+                <slot v-for="item of list" :item="item" />
+            </div>
+            `
+        }
+
+        const app = Vue.createApp({
+            components: {slot1, B, C, defaultSolt, nameSolt, listSolt},
+            data(){ // 父组件使用父组件作用域
+                return {
+                    name: "我是小明啊"
+                }
+            },
+            methods: {
+            },
+            template: `
+                <div>
+                    简单插槽
+                    <slot1> <p style="color:red">这里是第二行</p> </slot1>
+                    <hr>
+                    嵌套子组件的插槽
+                    <slot1> <B /> </slot1>
+                    <hr>
+                    <C>父组件作用域 [{{ name }}] </C>
+                    <hr>
+                    <defaultSolt> 我不让你默认 </defaultSolt>
+                    <defaultSolt></defaultSolt>
+                    <defaultSolt />
+                    <hr>
+                    <nameSolt> 
+                        <template v-slot:B> <p>我是B你想不到吧</p> </template>
+                        <template #C> <p>我是C你想不到吧</p>  </template>
+                        <template #A> <p>我是A你想不到吧</p> </template>
+                    </nameSolt>
+                    <hr>
+                    <listSolt v-slot="param">
+                        <div>{{ param }}</div>
+                    </listSolt>
+                    <hr>
+                    解构赋值
+                    <listSolt v-slot="{item}">
+                        <div>{{ item }}</div>
+                    </listSolt>
+                </div>
+            `
+        })
+
+        const vm = app.mount("#app")
+    </script>
+</html>

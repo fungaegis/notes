@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 异步组件 及 多级组件传值
+        const subChild = {
+            props: ["name"],
+            inject: ["age"],
+            template: `
+                <p>我是个孙组件 {{ name }}</p>
+                <p>我想跨级接收 {{ age }}</p>
+            `
+        }
+
+        const child = {
+            props: ["name"],
+            components: {"subchild": subChild},
+            template: `
+            <p>我是个子组件: {{ name }}</p>
+            <subchild :name="this.name" />
+            `
+        }
+
+
+
+        const app = Vue.createApp({
+            components: {child, subChild},
+            data(){
+                return{
+                    name: "我是个胖虎"
+                }
+            },
+            provide: {
+                age: 20
+            },
+            template: `
+                <div>
+                    <child :name="name" />
+                </div>
+            `
+        })
+
+        const vm = app.mount("#app")
+    </script>
+</html>

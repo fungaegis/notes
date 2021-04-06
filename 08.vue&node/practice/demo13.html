@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // Non-props
+
+        const nonProps1 = {
+            // 如果未声明props, 则在父组件中添加的属性会被传递到 子组件属性中
+            template: `
+                <div> 你把鼠标放上来瞧瞧 </div>
+            `
+        }
+
+        const nonProps2 = {
+            // 如果声明props, 则在子组件中成为局部变量
+            props: ["title"],
+            template: `
+                <div> 我就没有title属性,但是我有父组件传给我的style </div>
+            `
+        }
+
+        const nonProps3 = {
+            // 关闭继承属性
+            inheritAttrs: false,
+            template: `
+                <div> 我将继承属性给关闭啦! </div>
+            `
+        }
+
+        const nonProps4 = {
+            // $attrs 对象内有父组件声明时全部的属性
+            methods: {
+                consoleShow(){
+                    console.log(this.$attrs);
+                    console.log(this.$attrs.style.color);
+                }
+            },
+            template: `
+                <div v-bind="$attrs"> 继承全部 </div>
+                <div :title="$attrs.title"> 指定继承title属性 </div>
+                <div> 我不继承任何 </div>
+                <button @click="consoleShow">点击我看看控制台</button>
+            `
+        }
+
+        const app = Vue.createApp({
+            components: {nonProps1, nonProps2, nonProps3, nonProps4},
+            data(){
+                return {
+                }
+            },
+            methods: {
+            },
+            template: `
+                <div>
+                    <nonProps1 title="这就是Non-props" />
+                    <nonProps2 title="这不是Non-props" style="color: red" />
+                    <nonProps3 title="这不是Non-props" style="color: red" />
+                    <nonProps4 title="这不是Non-props" style="color: red; background: green" />
+                </div>
+            `
+        })
+
+        const vm = app.mount("#app")
+    </script>
+</html>

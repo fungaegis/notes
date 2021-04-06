@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 子组件调用父组件事件 及 校验
+
+        const subEvent1 = {
+            emits: ["event1"],
+            methods: {
+                subAddCounter(){
+                    console.log(this.$emit);
+                    this.$emit("event1", 30)
+                }
+            },
+            template: `
+                <div> <button @click="subAddCounter">子组件一</button> </div>
+            `
+        }
+
+        const subEvent2 = {
+            props: ["count"],
+            emits: {
+                event2: (value)=>{
+                    return value<20?true:false;
+                }
+            },
+            methods: {
+                subAddCounter(num){
+                    this.$emit("event2", this.count + num)
+                }
+            },
+            template: `
+                <div> <button  @click="subAddCounter(5)">子组件二</button> </div>
+            `
+        }
+
+        const app = Vue.createApp({
+            components: {subEvent1, subEvent2},
+            data(){
+                return {
+                    count: 0,
+                    count2: 0,
+                }
+            },
+            methods: {
+                addCounter(num){
+                    this.count = this.count += num;
+                },
+                addCounterMethod(func){
+                    this.count2 = func;
+                }
+            },
+            template: `
+                <div>
+                    <p>事件1: {{ count }}</p>
+                    <p>事件2: {{ count2 }}</p>
+                    <sub-event1 @event1="addCounter"  />
+                    <sub-event2 @event2="addCounterMethod" :count="count2"  />
+                </div>
+            `
+        })
+
+        const vm = app.mount("#app")
+    </script>
+</html>
