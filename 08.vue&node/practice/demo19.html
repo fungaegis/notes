@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        // 异步组件 具名插槽+作用域插槽+默认插槽 简写
+        const asyncCom = Vue.defineAsyncComponent(()=>{
+            return new Promise((resolve, reject)=>{
+                setTimeout(()=>{
+                    resolve({
+                        data(){
+                            return {
+                                todoList: [
+                                    {
+                                        name: "小明",
+                                        age: 20,
+                                        gender: true
+                                    },
+                                    {
+                                        name: "小黄",
+                                        age: 40,
+                                        gender: false
+                                    },
+                                    {
+                                        name: "小黑",
+                                        age: 90,
+                                        gender: true
+                                    },
+                                ],
+                                infoList: [
+                                    {
+                                        height: 170,
+                                        weight: 50
+                                    },
+                                    {
+                                        height: 250,
+                                        weight: 90
+                                    },
+                                    {
+                                        height: 150,
+                                        weight: 40
+                                    },
+                                ]
+                            }
+                        },
+                        template: `
+                            <div>
+                                <slot name="A" v-for="data of todoList" :item="data">{{data}}</slot>
+                                <hr>
+                                <slot name="B" v-for="data of infoList" :data="data">{{data}}</slot>
+                            </div>
+                        `
+                    })
+                }, 3000)
+            })
+        })
+
+
+
+        const app = Vue.createApp({
+            components: {asyncCom},
+            template: `
+                <div>
+                    异步组件+默认插槽+具名插槽+作用域插槽
+                    <asyncCom>
+                        <template #A="scope">
+                            <p style="color: red">
+                                {{ scope }}: {{scope.name}}-{{scope.age}}-{{scope.gender}}
+                            </p>
+                        </template> 
+                        <template #B="{data}">
+                            <p style="color: green">
+                                {{ data.height }}: {{data.weight}}
+                            </p>
+                        </template> 
+                    </asyncCom>
+                </div>
+            `
+        })
+        app.mount("#app")
+
+
+
+    </script>
+</html>
