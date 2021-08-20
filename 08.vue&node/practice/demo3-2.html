@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+</body>
+    <script>
+        import { ref } from 'vue'
+        const app = Vue.createApp({
+            template: `
+                <div>
+                    <button @click="updateShow">需要自定义选择吗?</button>
+                    <div v-if="btnIsShow">
+                        <input v-model="inputValue">
+                        <button @click="addName">添加</button>
+                    </div>
+                    <ul>
+                        <my-list v-for="(item, index) of names" :index="index" :item="item"></my-list>
+                    </ul>
+                </div>
+            `,
+            setup(){
+                const name = ref([])
+                const inputValue = ref(null)
+                const btnIsShow = ref(false)
+            }
+        })
+    </script>
+</html>
