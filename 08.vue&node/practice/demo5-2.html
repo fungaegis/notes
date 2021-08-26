@@ -11,37 +11,30 @@
     <div id="app"></div>
 </body>
     <script>
-        // 计算属性 侦听器 vue2写法
+        // 计算属性 侦听器 vue3 写法
         const app = Vue.createApp({
-            data(){
-                return {
-                    value: "",
-                    price: 20,
-                    rise: 0,
-                    history: 0
-                }
-            },
-            methods: {
-                calculate(){
-                    return Date.now()
-                },
-                risePrice(){
-                    this.price = this.price += 10;
-                }
-            },
-            computed: {
-                total(){
-                    return Date.now()
-                }
-            },
-            watch:{
-                price(current, prev){
-                    console.log("当前变化的值", current);
-                    console.log("变化前的值", prev);
-                    this.rise = current - prev;
-                    this.history += this.rise;
-                }
+            setup(props, context){
+                const { ref, computed, watch } = Vue;
+                const value = ref(null);
+                const price = ref(20);
+                const rise = ref(0);
+                const history = ref(0);
 
+                const calculate = ()=> Date.now();
+                const risePrice = ()=> price.value += 10;
+
+                const total = computed(()=> Date.now())
+                watch(price, (NewValue, oldValue)=>{
+                    console.log("原值", oldValue);
+                    console.log("变化值", NewValue);
+                    
+                    rise.value = NewValue - oldValue;
+                    history.value += rise.value;
+                })
+
+                return {
+                    value, price, rise, history, calculate, risePrice, total
+                }
             },
             template: `
                 <div>
