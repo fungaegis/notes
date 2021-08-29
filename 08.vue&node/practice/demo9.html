@@ -27,10 +27,11 @@
                 // 如果要传入event对象,在调用时`$event`
                 paramFunc(num, event){
                     this.count += num;
+                    console.log(event);
                     console.log(event.target);
                 },
                 // 多函数必须都要加括号
-                multipleFunc(){
+                multipleFunc(){ 
                     alert("multiple function");
                 }
             },

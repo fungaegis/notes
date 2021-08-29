@@ -11,28 +11,8 @@
     <div id="app"></div>
 </body>
     <script>
-        // 学习 v-if v-for v-on 及 实例化Vue的使用
-        Vue.createApp({
-            data(){
-                return {
-                    names: [],
-                    inputValue: "",
-                    btnIsShow: false
-                }
-            },
-            methods: {
-                addName(){
-                    if(this.inputValue){
-                        this.names.push(this.inputValue);
-                        this.inputValue = "";
-                    }else{
-                        alert("请输入姓名后再提交!")
-                    }
-                },
-                updateShow(){
-                    this.btnIsShow = !this.btnIsShow;
-                }
-            },
+        // 学习 v-if v-for v-on 自定义组件 使用
+        const app = Vue.createApp({
             template: `
                 <div>
                     <button @click="updateShow">需要自定义选择吗?</button>
@@ -41,10 +21,40 @@
                         <button @click="addName">添加</button>
                     </div>
                     <ul>
-                        <li v-for="(item, index) of names">[{{index}}]- {{item}}</li>
+                        <my-list v-for="(item, index) of names" :index="index" :item="item"></my-list>
                     </ul>
                 </div>
-            `
-        }).mount("#app")
+            `,
+            setup(props, context){
+                const { reactive, ref} = Vue
+                const names = reactive([])
+                const inputValue = ref(null)
+                const btnIsShow = ref(false)
+                const addName = ()=>{
+                    if(inputValue){
+                        names.push(inputValue.value);
+                        inputValue.value = "";
+                    }else{
+                        alert("请输入姓名后再提交!")
+                    }
+                }
+                const updateShow = ()=> btnIsShow.value = !btnIsShow.value;
+
+                return {
+                    names,
+                    inputValue,
+                    btnIsShow,
+                    addName,
+                    updateShow
+                }
+            },
+            components: {
+                "my-list":{
+                    props: ["index", "item"],  // 声明需要传参的组件
+                    template:  `<li>[{{index}}]- {{item}}</li>`
+                }
+            }
+        });
+        vm = app.mount("#app")
     </script>
 </html>
