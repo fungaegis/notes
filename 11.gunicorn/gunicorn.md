@@ -33,7 +33,7 @@ pre-fork和fork模式类似,都是通过一个单独的进程来处理请求,但
 ### 启动命令 & 参数
 - `gunicorn -w 4 -b 0.0.0.0:8000 demo:app`: 启动4个worker 监听8000端口 运行demo文件的app应用
 1.  `-c CONFIG` & `–config=CONFIG`: 指定一个配置文件(py文件)
-2.  `-b BIND` & `–bind=BIND`: 与指定socket进行板顶
+2.  `-b BIND` & `–bind=BIND`: 与指定socket进行绑定
 3.  `-D` & `–daemon`: 后台进程方式运行gunicorn进程
 4.  `-w WORKERS` & `–workers=WORKERS`: 工作进程的数量
 5.  `-k WORKERCLASS` & `–worker-class=WORKERCLASS`: 工作进程类型,包括sync(默认)(eventlet,gevent,tornado,gthread,gaiohttp)
