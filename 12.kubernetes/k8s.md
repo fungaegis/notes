@@ -79,7 +79,6 @@ Worker节点结构:(工作节点)
     - Pod 内部可以有一个容器，或者多个容器
     - 由多个docker容器（常规1个） + pause容器组成(pause用来传达管理其他容器的指令)
 - Docker: 容器引擎
-- Fluentd: 主要负责日志收集、存储与查询
 
 
 
@@ -225,12 +224,6 @@ prometheus-68f6cf7cfd-87sh2             1/1     Running   1          169d
     - Example: `kubectl describe secrets admin-user-token-666wc -n kube-system` 查看dashboard token
 - `kubectl describe pod 容器组名`: 查看指定容器详情
     - Example: `kubectl describe pod redis-master-fd5b55b33-t95lr` 查看redis pod 的详情
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
 
 ```py
 root@xixipc:~# kubectl describe pod redis-master-fd5b55b33-t95lr
@@ -314,7 +307,7 @@ spec:
   - image: xixi/redis
     name: redis
     ports:
-    - containerPort: 8080
+      containerPort: 8080
       protocol: TCP
 ```
 
@@ -378,7 +371,7 @@ FIELDS:
 
 - e.g.: 查看services的status解释:`kubectl explain services.status`
 
-```
+```yaml
 root@devops40:~# kubectl explain services.status
 KIND:     Service
 VERSION:  v1
@@ -437,46 +430,43 @@ tips: 无法修改运行中资源的名称和类型
 apiVersion: v1
 kind: Pod
 metadata:
+  creationTimestamp: "2020-04-14T01:04:52Z"
+  generateName: redis-master-fd5b55b85-
   labels:
-    app: test-gsuper
-    version: v1
-  name: test-gsuper-deployment-5f498fc5d5-52hdt
+    app: redis
+    pod-template-hash: fd5b55b85
+    role: master
+  name: redis-master-fd5b55b85-t9r
   namespace: default
   ownerReferences:
   - apiVersion: apps/v1
     blockOwnerDeletion: true
     controller: true
     kind: ReplicaSet
-    name: test-gsuper-deployment-5f498fc5d5
+    name: redis-master-fd5b55b85
+    uid: 593a225f-c885-11e9-950d-a401211cc2
+  resourceVersion: "69192726"
+  selfLink: /api/v1/namespaces/default/pods/redis-master-fd5b55b85-t95lr
+  uid: f26b819a-7deb-11ea-8c04-a4bf012112
 spec:
   containers:
-  - env:
-    - name: product
-      value: xixixi
-    - name: db_env
-      value: uat
-    - name: docker_env
-      value: "1"
-    - name: run_env
-      value: uat
-    image: d.uat.dr:5000/test-gsuper:test-0.0.1.rc.51
-    imagePullPolicy: Always
-    name: test-gsuper
+  - image: redis:2.8.23
+    imagePullPolicy: IfNotPresent
+    name: redis-master
     ports:
-    - containerPort: 3000
+    - containerPort: 6379
+      name: redis-server
       protocol: TCP
     resources: {}
     terminationMessagePath: /dev/termination-log
     terminationMessagePolicy: File
     volumeMounts:
-    - mountPath: /var/log/
-      name: log-nfs
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      name: default-token-qrnss
+      name: default-token-f7wln
       readOnly: true
   dnsPolicy: ClusterFirst
   enableServiceLinks: true
-  nodeName: 172.31.31.24
+  nodeName: 172.16.0.40
   restartPolicy: Always
   schedulerName: default-scheduler
   securityContext: {}
@@ -484,13 +474,50 @@ spec:
   serviceAccountName: default
   terminationGracePeriodSeconds: 30
   volumes:
-  - name: log-nfs
-    persistentVolumeClaim:
-      claimName: log-nfs
-  - name: default-token-qrnss
+  - name: default-token-f7w
     secret:
       defaultMode: 420
-      secretName: default-token-qrnss
+      secretName: default-token-f7w
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2020-04-14T01:18:11Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2020-04-24T09:24:48Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2020-04-24T09:24:48Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2020-04-14T01:18:11Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://b63482e57bc593648629a6d5c76f30a3ec9c3b9ec067d4d45f7
+    image: redis:2.8.23
+    imageID: docker-pullable://redis@sha256:e507029ca6a11b85f8628ff582f16fd757e64431f5ca6d27a13c
+    lastState:
+      terminated:
+        containerID: docker://82104ba34bd48da6c099edd52620a2ef2ee8b525b664
+        exitCode: 0
+        finishedAt: "2020-04-24T09:23:39Z"
+        reason: Completed
+        startedAt: "2020-04-24T09:22:52Z"
+    name: redis-master
+    ready: true
+    restartCount: 2
+    state:
+      running:
+        startedAt: "2020-04-24T09:24:46Z"
+  hostIP: 172.16.0.40
+  phase: Running
+  podIP: 172.20.0.97
+  qosClass: BestEffort
+  startTime: "2020-04-14T01:18:11Z"
 ```
 
 #### 2.Deployment的yaml
@@ -499,20 +526,25 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    deployment.kubernetes.io/revision: "9"
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2019-08-27T04:44:26Z"
+  generation: 1
   labels:
-    app: test-admin
-    version: v1
-  name: test-admin-deployment
+    app: redis
+    role: master
+  name: redis-master
   namespace: default
+  resourceVersion: "69192729"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/redis-master
+  uid: 5939e1ab-c885-11e9-950d-a1211cc2
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: test-admin
-      version: v1
+      app: redis
+      role: master
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -522,40 +554,44 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: test-admin
-        version: v1
+        app: redis
+        role: master
     spec:
       containers:
-      - env:
-        - name: product
-          value: xixixi
-        - name: db_env
-          value: uat
-        - name: docker_env
-          value: "1"
-        - name: run_env
-          value: uat
-        image: d.uat.dr:5000/test-admin:test-0.0.2.rc.12
-        imagePullPolicy: Always
-        name: test-admin
+      - image: redis:2.8.23
+        imagePullPolicy: IfNotPresent
+        name: redis-master
         ports:
-        - containerPort: 3000
+        - containerPort: 6379
+          name: redis-server
           protocol: TCP
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /var/log/
-          name: log-nfs
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      volumes:
-      - name: log-nfs
-        persistentVolumeClaim:
-          claimName: log-nfs
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2019-08-27T04:44:26Z"
+    lastUpdateTime: "2019-08-27T04:45:22Z"
+    message: ReplicaSet "redis-master-fd5b55b85" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  - lastTransitionTime: "2021-06-10T03:49:51Z"
+    lastUpdateTime: "2021-06-10T03:49:51Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
 ```
 |  属性名称  |    介绍    |
 | :--------: | :--------: |
@@ -653,7 +689,7 @@ volumes:  # 数据卷
 #### 4.pod 创建流程
 ![](./images/create_pod_workflow.png)
 1. 客户端提交创建请求，可以通过API Server的Restful API，也可以使用kubectl命令行工具。支持的数据类型包括JSON和YAML。
-2. API Server处理用户请求，存储Pod数据到etcd。
+2. API Server处理用户请求，存储Pod的元数据到etcd。
 3. 调度器通过API Server查看未绑定的Pod。尝试为Pod分配主机。
     1. 过滤主机 (调度预选)：调度器用一组规则过滤掉不符合要求的主机。比如Pod指定了所需要的资源量，那么可用资源比Pod需要的资源量少的主机会被过滤掉。
     2. 主机打分(调度优选)：对第一步筛选出的符合要求的主机进行打分，在主机打分阶段，调度器会考虑一些整体优化策略，比如把容一个Replication Controller的副本分布到不同的主机上，使用最低负载的主机等。
@@ -738,8 +774,15 @@ spec:
 ### 3.调度策略
 
 #### 1.节点选择器标签(nodeSelector)
+`kubectl label nodes <node-name> <label-key>=<label-value> `
 
 `kubectl label nodes qa-test001 env=test`: 向qa-test001这个节点打上`env=test`的标签
+
+`kubectl get nodes --show-labels`: 查看label
+
+`kubectl label nodes <node-name> <label-key>-`: 删除
+
+`kubectl label nodes <node-name> <label-key>=<label-value> --overwrite`: 修改
 
 部署POD的时候selector会部署在含有指定label的node
 
@@ -787,13 +830,13 @@ sepc:
     env:
     - name: MYSQL_ROOT_PASSWORD
       value: "123456pwd"
-  resources:
-    requests:
-      memory: "64Mi"
-      cpu: "250m"
-    limits:
-      memory: "128Mi"
-      cpu: "500m"
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
 ```
 - requests:
   - 调度所需的资源最少0.25 个CPU 以及64MiB 内存，
@@ -1033,8 +1076,10 @@ spec:
         app: nginx 
     spec:
       containers:
-      - name: nginx image: nginx ports:
-      - containerPort: 80
+      - name: nginx 
+        image: nginx 
+        ports:
+        - containerPort: 80
 ```
 
 label selector(标签选择器)选择`app: nginx `
