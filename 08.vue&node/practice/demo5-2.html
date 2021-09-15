@@ -24,16 +24,20 @@
                 const risePrice = ()=> price.value += 10;
 
                 const total = computed(()=> Date.now())
+                const list = ref([]);
+                const show = computed(()=> [Date.now(), list.value])
+                
                 watch(price, (NewValue, oldValue)=>{
                     console.log("原值", oldValue);
                     console.log("变化值", NewValue);
                     
                     rise.value = NewValue - oldValue;
                     history.value += rise.value;
+                    list.value.push(history.value);
                 })
 
                 return {
-                    value, price, rise, history, calculate, risePrice, total
+                    value, price, rise, history, calculate, risePrice, total, show
                 }
             },
             template: `
@@ -43,6 +47,7 @@
                         修改值{{ value }}
                         <p>methods: {{ calculate() }}</p>
                         <p>computed: {{ total }}</p>
+                        <p>computed_dynamic: {{ show }}</p>
                     </div>
                     <div>
                         <p>商品价格: {{ price }}</p>
