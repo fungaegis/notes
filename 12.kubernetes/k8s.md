@@ -209,7 +209,7 @@ prometheus-68f6cf7cfd-87sh2             1/1     Running   1          169d
 |Running|运行中|
 |Error|异常，无法提供服务|
 |Pending|准备中，暂时无法提供服务|
-|Terminaling|结束中，即将被移除|
+|Terminating|结束中，即将被移除|
 |Unknown|未知状态，多发生于节点宕机|
 |PullImageBackOff|镜像拉取失败|
 
@@ -759,14 +759,14 @@ metadata:
   labels:
     run: test
 spec:
-      nodeSelector:
-         env: test
-      containers:
-      - name: selenium-node-chrome
-        image: registry.4paradigm.com/chrome_debug
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 5900
+  nodeSelector:
+      env: test
+  containers:
+  - name: selenium-node-chrome
+    image: registry.4paradigm.com/chrome_debug
+    imagePullPolicy: IfNotPresent
+    ports:
+      - containerPort: 5900
 ```
 
 
@@ -1122,7 +1122,7 @@ deployment 是最常见的控制器，是部署静态服务用的控制器。控
 - `kubectl create deployment web --image=nginx`: 创建名为web的deployment
 - `kubectl create deployment web --image=nginx --dry-run -o yaml > nginx.yaml`: 输出deployment的配置文件
 - `kubectl apply -f nginx.yaml`: 以指定的配置文件创建deployment
-- `kubectl expose deployment web --port=80 --type=NodePort --target-port=8000 --name=web1`: 为deployment的web创建名为web1的service,并通过service的80端口转发至容器的8000端口上
+- `kubectl expose deployment web --port=80 --type=NodePort --target-port=8000 --name=web1`: 为deployment的web资源创建名为web1的service,将容器80端口与宿主机8000端口映射
 
 
 配置文件yaml
