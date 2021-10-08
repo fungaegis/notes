@@ -2112,6 +2112,7 @@ spec:
   nfs:                                       #指定NFS共享目录和IP信息
     path: /backup/v2
     server: 172.27.9.181
+    
 apiVersion: v1
 kind: PersistentVolume
 metadata:
