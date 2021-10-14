@@ -25,7 +25,7 @@
 
                 const total = computed(()=> Date.now())
                 const list = ref([]);
-                const show = computed(()=> [Date.now(), list.value])
+                const show = computed(()=> [Date.now(), Date.now()+history.value, list.value])
                 
                 watch(price, (NewValue, oldValue)=>{
                     console.log("原值", oldValue);

@@ -14,7 +14,7 @@
         // 异步组件
         const asyncCom = Vue.defineAsyncComponent(()=>{
             return new Promise((resolve, reject)=>{
-                setInterval(()=>{
+                setTimeout(()=>{
                     resolve({
                         template: "<div>3秒后我才出现,我是异步组件</div>"
                     })
