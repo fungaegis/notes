@@ -65,7 +65,7 @@
         }
 
         // 作用域插槽
-        const listSolt = {
+        const listSlot = {
             data(){
                 return {
                     list: ["小明", "小黄", "小黑"]
@@ -80,7 +80,7 @@
 
 
         const app = Vue.createApp({
-            components: {slot1, B, C, defaultSolt, nameSolt, listSolt},
+            components: {slot1, B, C, defaultSolt, nameSolt, listSlot},
             data(){ // 父组件使用父组件作用域
                 return {
                     name: "我是小明啊"
@@ -108,14 +108,14 @@
                         <template #A> <p>我是A你想不到吧</p> </template>
                     </nameSolt>
                     <hr>
-                    <listSolt v-slot="param">
+                    <listSlot v-slot="param">
                         <div>{{ param }}</div>
-                    </listSolt>
+                    </listSlot>
                     <hr>
                     解构赋值
-                    <listSolt v-slot="{item}">
+                    <listSlot v-slot="{item}">
                         <div>{{ item }}</div>
-                    </listSolt>
+                    </listSlot>
                 </div>
             `
         })
