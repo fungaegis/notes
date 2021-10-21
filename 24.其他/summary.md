@@ -344,6 +344,34 @@ http1.1
 6. nginx 启动
 7. nginx -t 检查配置
 
+优先级:
+- = 
+- ^~ 
+- ~ pattern
+- ~* pattern
+- /uri
+- /
+
+负载均衡
+```nginx
+http {
+    upstream myserver {
+        server IP1 weight 2;
+        server IP2 weight 1;
+    }
+    server {
+        location /g {
+            proxy_pass http://myserver;
+        }
+    }
+}
+```
+负载均衡方式: 
+- weight
+- fair
+- ip_hash
+- 默认轮询
+
 # shell
 - 组:
     - groupadd 组名
@@ -382,11 +410,14 @@ http1.1
 - sed: -i 真实 -n 仅显示 -f 文件
     - a后 i前 r写入 w输出 p显示 s/old/new/ig替换 删除d
     - `/^start/,/^end/`
+    - sed '3,22 s/echo/ECHO/' test.sh
 - awk
     - 格式: `awk 'BEGIN{}PATTERN{COMMAND}END{}' file`
     - `printf %20s%20s, $1, $2` %s %d %f
     - $0 $1 $2 $NF $NR
     - FS RS
+    - `+` 右对齐 `-` 左对齐
+    - awk 'BEGIN{FS=":"} $6 ~ "/bin" {count++; printf "%-20s%-20s\n", $1, $NF} END{printf "%-20s%-20s\n", "Total", count}' /etc/passwd
 - 表达式
     - -eq -lt -ne -gt
     - && ||
@@ -404,7 +435,7 @@ then
     echo "2"
 else
     echo "3"
-if
+fi
 ```
 - for
 ```shell
@@ -525,6 +556,7 @@ volumes:
 # celery
 - 架构: master broker worker 结果存储
 - 命令行:
+    - celery -A demo worker
     - celery multi start w1 -A demo -l info --pidfile=./celery/%n.pid --logfile=./celery/%n%I.log
         - kill stopwait stop restart start
     - celery -A demo beat -l info --detach --logfile=./celery/%n.log
@@ -585,7 +617,7 @@ volumes:
     1. 在group by中使用的字段才可以在select中使用
     2. where不能用聚合函数 having可以且必须出现在select中
 - 联结: inner join  left join  right join union  union all
-- 插入: insert info 表名 values 更新: update 表名 set where 删除 delete from 表名 where
+- 插入: insert into 表名 values 更新: update 表名 set field=xx where 删除 delete from 表名 where
 - 建表: CREATE TABLE 表名(字段名 类型 约束 参数)
 - 加字段: ALTER TABLE 表名 ADD 名 类型 约束 参数;
 - 加约束: ALTER TABLE 表名 ADD CONSTRAINT 约束 (字段);
@@ -605,6 +637,7 @@ volumes:
 - MYSQL_DATABASE=myproject 数据库名
 - MYSQL_USER=dbuser 普通用户名
 - MYSQL_PASSWORD=password  普通用户密码
+- 事物: 读未提交(脏读) 读已提交(不可重复读) 重复读(幻读) 序列化
 
 # jira
 问题类型 工作流 界面 字段 优先级 状态
@@ -1259,7 +1292,9 @@ volumes:
         - 模块(树型控件)
         - 用户
             - 查看: 列表
-                - 邮箱 用户名 手机号 创建时间 最后登录时间 角色(文字提示) 团队(文字提示) 密码重置 冻结 
+                - 邮箱 用户名 手机号 创建时间 最后登录时间 角色(文字提示) 团队(文字提示) 密码重置 冻结
+            - 查看: 详情 弹窗
+                - 邮箱 用户名 手机号 角色 团队
         - 角色
             - 查看: 列表
                 - 名字 权限(弹出框)
