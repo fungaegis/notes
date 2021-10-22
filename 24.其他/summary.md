@@ -255,6 +255,10 @@ AI测试
 - -S: sheet
 - --mark: sheet文件
 
+`pytest -E=ENV -P=PRODUCT -S=EXCEL_SHEET_NAME1 -S=EXCEL_SHEET_NAME2 --mark=MARK_NAME
+-n=auto --dist=loadscope 
+--rename=on --skip=EXCEL_SHEET_NAME1 
+--alluredir=../reports/allure-result`
 
 1. pytest_configure
 - 初始化配置, 将配置文件加载到上下文中
