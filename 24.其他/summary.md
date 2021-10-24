@@ -637,7 +637,13 @@ volumes:
 - MYSQL_DATABASE=myproject 数据库名
 - MYSQL_USER=dbuser 普通用户名
 - MYSQL_PASSWORD=password  普通用户密码
-- 事物: 读未提交(脏读) 读已提交(不可重复读) 重复读(幻读) 序列化
+- 四事物: 读未提交(脏读) 读已提交(不可重复读) 重复读(幻读) 序列化
+- 四要素: 原子性 一致性 隔离性 持久性
+- 行锁: 开销大，加锁慢；会出现死锁；锁定粒度小，发生锁冲突的概率低，并发度高
+innodb 行锁是基于索引加载的 共享锁 排他锁
+    - 锁冲突概率低，并发性高，但是会有死锁的情况出现
+- 表锁: 开销小，加锁快；不会出现死锁；锁定力度大，发生锁冲突概率高，并发度最低
+MyISAM 表共享锁 表独占写锁(mysql非索引字段)
 
 # jira
 问题类型 工作流 界面 字段 优先级 状态
@@ -697,7 +703,7 @@ volumes:
     - 查找原理: 通过键的一部分散列值在散列表中找, 如果找不到表元则报keyError, 如果找到表元则判断 键与表元是否相等(散列冲突) 如果不相等则用另一部分散列值去散列表的另一行中找 直至键相等取的值
 - 推导式: 列表推导式 字典/集合推导式 生成器表达式 三元表达式
 - 生成器 next send close throw 可迭代对象(可遍历) -> 迭代器(可next) -> 生成器
-- 标准函数: functools.filter map zip functools.partial
+- 标准函数: functools.filter map zip partial reduce
 - 内置函数: lambda n: about n expression
 - 闭包
     1. 函数中嵌套函数
@@ -727,12 +733,12 @@ volumes:
 - 元类: type(name, bases, attr)
     - 所有对象都是type的实例  实例关系type
     - 所有类的基类都是object  继承关系object
-    - 定义metaclass后, 将调用元类的new方法 `__new__(cls, name, bases, attrs`
+    - 定义metaclass后, 将调用元类的new方法 `__new__(cls, name, bases, attrs)`
     - 做一个ORM 字段类 元类 模型类
 - 内存管理:
     - is 比较内存地址 id 查看内存地址
     - 小整数池: -5 ~ 256
-    - intern机制: 下划线,数字,字母组成不超过20哥自付的字符串会放入池中, 共用id
+    - intern机制: 下划线,数字,字母组成不超过20长度的字符串会放入池中, 共用id
     - 深(全部)浅(仅父对象)拷贝: copy.deepcopy
     - 垃圾回收:  GC模块
         - 引用计数: 优点: 简单实时 缺点: 开销大, 无法解决循环引用
@@ -787,7 +793,7 @@ volumes:
     - shell check changepassword createsuperuser createuser
     - sqlmigrate 应用名 序号; makemigrations; migrate --database 名; showmigrations;
 - setting
-    - DEBUG ALLOWED_HOSTS INSTALLED_APPS DATABASES TIME_ZONE MIDDLEWARE ROOT_URLCONF DATABASE_ROUTERS MEDIA_ROOT DATABASE_APPS_MAPPING(label: db_name) USE_TZ TIME_ZONE
+    - DEBUG ALLOWED_HOSTS INSTALLED_APPS DATABASES TIME_ZONE MIDDLEWARE ROOT_URLCONF DATABASE_ROUTERS MEDIA_ROOT DATABASE_APPS_MAPPING(label: db_name) USE_TZ
     - db: 引擎 数据库名 账户 密码 host port conn_max_age
     - 数据库路由: db_for_read db_for_write allow_relation allow_syncdb allow_migrate
 - auth: PBKDF2
@@ -850,7 +856,7 @@ volumes:
     - SERVER_EMALL DEFAULT_FROM_EMAIL EMAIL_HOST EMAIL_HOST_USER EMAIL_HOST_PASSWORD EMAIL_BACKEND
 - 缓存 django.core.cache.cache
     - 配置
-    - set(k,v,t) get(k,d) get.add(k, v, t) get_or_set(k, d) get_many([]) delete delete_many clear touch(k,t) incr decr
+    - set(k,v,t) get(k,d) add(k, v, t) get_or_set(k, d) get_many([]) set_many([]) delete delete_many clear touch(k,t) incr decr
     - django_redis.get_redis_connection("name")
         - incr hmset expire hincrby hget expireat
 # 部署
@@ -934,7 +940,7 @@ volumes:
         - 配置: DEFAULT_AUTHENTICATION_CLASSES authentication_classes
     - 区别: django需要主动调用, 常用来进行登录校验;drf父类为APIView都可被动调用, 常用来做后续验证token识别
 - 令牌 djangorestframework-simplejwt
-    - token结构: header(base4(类型,算法)) playload(base64(过期时间, 用户等)) signature(HS256(header+.+playload+secret))
+    - token结构: header(base64(类型,算法)) playload(base64(过期时间, 用户等)) signature(HS256(header+.+playload+secret))
     - 鉴权配置: DEFAULT_AUTHENTICATION_CLASSES: rest_framework_simplejwt.authentication.JWTAuthentication
     - 配置: SIMPLE_JWT: ACCESS_TOKEN_LIFETIME:5m REFRESH_TOKEN_LIFETIME:24h 可以用timedelta对象
         - UPDATE_LAST_LOGIN:false AUTH_HEADER_NAME: Authorization AUTH_HEADER_TYPES:Bearer
