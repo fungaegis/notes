@@ -247,6 +247,162 @@ AI测试
     2. 保存到`项目/screenshot`
     3. 无保存,仅附加到
 
+# redis
+- 特性:
+    - 基于内存 性能高效(读11万次/s 写8.1万次/s)
+    - 支持分布式
+    - c/s通讯模型 发布订阅
+    - 单进程单线程
+    - 丰富的数据类型
+    - 操作具有原子性
+    - 持久化
+    - 高并发读写
+    - 支持lua脚本
+- 场景: 高频读 低频写 计数器 消息队列 
+- 配置 redis.conf 持久化 data
+- 打开持久化 --appendonly yes
+- 命令:
+    - redis-server
+    - redis-cli -h host -p port -a pw
+    - CONFIG GET *
+    - exists expire move persist ttl rename
+- 数据类型: string hash list set zset
+    - string 二进制安全 一个键最大能存512M
+        - set get mset mget incr decr
+    - hash 支持针对某一个key进行修改 最大成员数2^32-1 40亿+
+        - hset hmset hget hmget hgetall hkeys hlen hdel hexists
+    - list 双向链表 增删快 最大成员数2^32-1 40亿+
+        - lpush rpush lpop rpop lrange name start end; lset name index value; lindex name index; llen
+    - set 哈希表 添加删除查找复杂度都是O(1) 差集交集并集 最大成员数2^32-1 40亿+
+        - sadd semebers sdiff sinter sunion sismember
+    - zset 按score排序 最大成员数2^32-1 40亿+
+        - zadd zrangebyscore name min max; zcard zcount name min max; zrank zscore
+- 批量删除
+- 过期策略: 定期删除 惰性删除 内存淘汰策略
+    - 内存淘汰策略: 8种 多使用 过期时间键种删除使用频率最少的键
+- 缓存穿透: 不断请求数据库和缓存中都无的数据, 导致请求不断直接访问至数据库, 使得数据库压力过大
+    - 布隆过滤器(存在有可能不存在, 不存在一定不存在)
+    - 接口层校验
+    - 将空数据写入缓存中,设置短生命
+- 缓存击穿: 某个热门数据缓存过期, 大量请求读取缓存为未到, 都去数据库取数据, 引起数据库压力过大
+    - 键值过期时间随机 加互斥锁
+- 缓存雪崩: 热门缓存数据批量过期, 导致大量请求直接访问数据库, 引起数据库down机/压力过大
+    - 随机过期时间
+    - 分布式部署
+- 发布订阅
+    - `SUBSCRIBE channel`
+    - `PUBLISH channel`
+
+# pytest
+- 参数: --fixtures --cache-show --cache-clear --collect-only --durations --setup-show --markers
+    - -q -s -v -x -m -k
+    - -r afEsxXpP
+- 运行: 按标记 按节点 按表达式
+- 退出code: 0成功 1部分失败 2终止 3内部错误 4命令错误 5未收集到
+- 用例收集策略 文件 类 方法
+- 缓存: config.cache .set .get
+- 捕获断言 `with pytest.raises(exc, match) as e` e.value e.type e.traceback
+- fixture(scope, params, autouse, ids, name)
+    - 发现顺序: 测试类 测试模块 conftest 内置和第三方插件
+    - 使用: 直接写入形参 pytest.mark.usefixtures("")
+    - 运行顺序: 范围 依赖 引用
+    - 内置方法: tmp_path pytestconfig
+- request 上下文
+    - request.module 可以直接获取执行的模块下的属性
+    - request.getfixturevalue() 调用fixture函数
+- 函数
+    - fail importorskip(modname, min, reason) exit skip(reason, allow_module_level) skipif(condition, reason) param(value, marks, id) xfail(reason)
+- pytest.mark.parametrize(argnames, argvalues, indirect ids, scope)
+    - 多重参数化时内层先运行
+- pytest.mark
+    - xfail(condition, reason, raises, run, strict)
+- pytest.ini: mark= addopts= 收集规则(pytest_files)
+- hook(setuptools, 初始化, 收集用例, 运行, 报告, 调试)
+    - pytest_addoption(parser):
+        - parser.addoption(name, actions, default, type ,required, dest, const, choices)
+            - action: store append store_const append_const
+            - type: int str float list
+    - pytest_configure(config)
+    - pytest_collection_modifyitems(session, config, items)
+        - config.hook.pytest_deselected(items)
+    - pytest_deselected(items)
+    - pytest_generate_tests(metafunc): metafunc.parametrize(argnames, argvalues, ids)
+    - pytest_runtest_setup(item) call teardown
+    - pytest_runtest_makereport(item, call): 需要提供返回值 @pytest.hookimpl(hookwarpper=True)
+    - pytest_report_teststatus(report, config)
+    - pytest_terminal_summary(config)
+    - pytest_assertrepr_compare(config, op, left, right)
+- xdist:
+    - --dist: each load loadscope loadfile no
+    - --tx
+- allure
+    - --alluredir
+- 源码:
+1. 通过 HookspecMarker 类的实例 装饰器定义插件调用规范
+2. 通过 HookimplMarker 类的实例 装饰器定义插件逻辑
+3. 创建 PluginManager的实例 添加规范名(add_hookspecs),注册插件逻辑实例(register)
+4. 调用插件
+
+```py
+pm = pluggy.PluginManager("example")
+pm.add_hookspecs(MySpec)  # 添加规范函数
+
+# 注册插件
+pm.register(Plugin_1())  # 添加的是实例化函数
+pm.register(Plugin_2())
+
+res = pm.hook.myhook(a=10, b=20)
+```
+
+HookspecMarker实例的参数:
+- firstresult: 如果firstresult值为True时，获取第一个plugin执行结果后就停止（中断）继续执行。
+- historic: 如果值为True时，表示这个hook是需要保存调用记录（call history）的，并将该调用记录回放在未来新注册的plugins上。
+
+HookimplMarker实例的参数:
+- tryfirst: 如果tryfirst值为True，则此plugin会尽可能早的在1:N的实现链路执行
+- trylast: 如果trylast值为True，则此plugin会相应地尽可能晚的在1:N的实现链中执行
+- hookwrapper: 如果该参数为True，需要在plugin内实现一个yield，plugin执行时先执行wrapper plugin前面部分的逻辑，然后转去执行其他plugin，最后再回来执行wrapper plugin后面部分的逻辑。
+- optionalhook: 如果该参数为True，在此plugin缺少相匹配的hook时，不会报error（spec is found）
+
+# allure
+- cmd: allure generate 源文件 -o 输出文件 -c
+    - allure serve 源文件
+- 函数:
+    - feature story step(支持上下文)
+    - attach(body, name, attachment_type) title
+    - link issue testcase description
+# selenium
+- 1.x 采用 rc方案 2.x 集成了webdriver
+- 实例方法: get close quit
+- 八大定位: id name class tag link partial link text xpath
+    - xpath: ancestor parent preceding following -sibling
+- 三大等待: 隐形等待 强制等待 显性等待
+    - implicitly_wait(time)
+    - 强制等待 selenium.webdriver.support
+        - .wait.WebDriverWait(driver, timeout)
+            - 实例方法: .until() not_until()
+        - .expected_conditions
+            - 类方法: 元素可见 元素存在 新窗口 iframe alert
+- 三大切换: switch 窗口 iframe alert
+    - 窗口: 获取句柄 显性等待 获取句柄 切换至最新句柄
+    - iframe: name webelement index 用EC还支持定位 defalut_content parent_frame
+    - alert: 切换后返回实例 text accept() dismiss() send_keys()
+- 键盘: selenium.webdriver.common.keys.Keys
+    - webelement.send_keys(Keys.ENTER)
+- 鼠标: selenium.webdriver.common.action_chains.ActionChains
+    - click 点击保持 释放 拖拽 
+    - perform
+- 下拉框: selenium.webdriver.support.select.Select
+    - 通过value index text 来选择
+- 调用js: driver.execute_script(js)
+    - scrollIntoView()
+    - window.scrollTo(0, document.body.scrollHeight)
+- 下载: 下载需要设置禁止弹出下载窗口及地址
+- 上传文件: pyautogui
+- PO: 基础对象层 数据层 定位层 逻辑层 用例层
+- grid
+    - hub: 4444/wd/hub
+# appium
 
 # api框架
 参数:
@@ -307,13 +463,15 @@ api用例: 500  sheet: 40+
 ui用例: 100 
 
 # http
-三次握手 四次挥手 CA证书 https交换流程 
-http1.1
-长连接
-缓存处理
-2.0
-服务推送
-多路复用
+- 三次握手: 客 close syn-send established 服 close syn-rcvd established
+    - 同步seq 建立可靠信道 防止失效报文延迟到达引发错误
+- 四次挥手: 客 established fin wait1 fin wait2 time wait close 服 established close wait last-ack close
+- GET: 一个tcp数据包
+- POST: 两个tcp数据包
+- CA证书 https交换流程 
+- http1.1 长连接 缓存处理
+- 2.0 服务推送 多路复用
+- 200 204无资源返回 301永久 302临时 401无认证 403禁止访问 404无法找到
 
 # nginx
 优势:
