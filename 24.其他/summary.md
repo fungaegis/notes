@@ -415,13 +415,48 @@ HookimplMarker实例的参数:
         - 通过cookie可以标记 注释和用例结果
 - options: webdriver.ChromeOptions().add_arguments()
 # appium
-- 原理: 
+- 流程: 
     1. appium serve 使用adb向设备部署Bootstrap.jar
     2. 脚本发送http协议webdriver协议json格式到 appium server 4723
     3. Bootstrap.jar 开启 4724端口, server发送socket协议json格式到Bootstrap.jar
     4. Bootstrap.jar 将指令发送到uiautomator
     5. uiautomator执行
-    
+- UiAutoMator是android sdk自带的app ui自动化测试java库
+- Bootstrap是appium安装在设备上的UiAutoMator脚本, 继承于UiAutoMatorTestCase
+- 命令:
+    - 获取apk包名: adb shell pm list package
+    - 获取activity: adb shell dumpsys package com.xxx
+    - aapt: aapt dump badging apk包
+- app安装: caps配置(app), driver.install_app(), adb install
+- 配置: automationName platformName platformVersion deviceName app noRest appActivity appPackage chromedriverExecutable autoGrantPermissions
+- 定位方法: resource-id class ACCESSIBILITY_ID(content-desc) ANDROID_UIAUTOMATOR XPATH
+    - 支持组合定位: resourceId textContains className descriptionContains
+- 实例方法: current_activity page_source close_app() get_window_size()
+- 触摸&多重: appium.webdriver.common
+    - 触摸 .touchaction.TouchAction
+        - 实例方法: press wait move_to release perform
+    - 多重 .multiaction.MultiAction
+        - 实例方法: add(触摸实例1, 实例2) perform()
+- 获取toast: 1.  `//*[contains(text(), "")]` 2. 元素存在
+- scroll 翻页
+    - 自定义翻页: 
+- webview: chrome://inspect/#devices
+    - driver.contexts driver.switch_to.context(句柄)
+- 微信小程序 需要打开DEBUG模式
+- appium docker
+    - 挂载: .android文件 /dev/bus/usb
+    - 参数: REMOTE_ADB ANDROID_DEVICES
+
+# ADB
+- adb devices
+- adb -s
+- adb pull 设备 电脑
+- adb push 电脑 设备
+- adb kill-server
+- adb start-server
+- adb logcat
+- adb connect host:port
+- adb tcpip
 
 # api框架
 参数:
