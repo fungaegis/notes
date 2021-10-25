@@ -397,12 +397,31 @@ HookimplMarker实例的参数:
 - 调用js: driver.execute_script(js)
     - scrollIntoView()
     - window.scrollTo(0, document.body.scrollHeight)
+    - return Object.keys(sessionStorage)
 - 下载: 下载需要设置禁止弹出下载窗口及地址
 - 上传文件: pyautogui
 - PO: 基础对象层 数据层 定位层 逻辑层 用例层
 - grid
     - hub: 4444/wd/hub
+    - master: 4444/grid/console
+    - register: 4444/grid/register
+    - 环境变量
+        - hub: 会话数
+        - node: 实例数 会话数 
+    - 第三方: zalenium
+        - 预览: 4444/grid/admin/live
+            -   build refresh on_active_sessions
+        - dashboard: 4444/dashboard
+        - 通过cookie可以标记 注释和用例结果
+- options: webdriver.ChromeOptions().add_arguments()
 # appium
+- 原理: 
+    1. appium serve 使用adb向设备部署Bootstrap.jar
+    2. 脚本发送http协议webdriver协议json格式到 appium server 4723
+    3. Bootstrap.jar 开启 4724端口, server发送socket协议json格式到Bootstrap.jar
+    4. Bootstrap.jar 将指令发送到uiautomator
+    5. uiautomator执行
+    
 
 # api框架
 参数:
