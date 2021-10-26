@@ -855,11 +855,11 @@ volumes:
 - MYSQL_PASSWORD=password  普通用户密码
 - 四事物: 读未提交(脏读) 读已提交(不可重复读) 重复读(幻读) 序列化
 - 四要素: 原子性 一致性 隔离性 持久性
-- 行锁: 开销大，加锁慢；会出现死锁；锁定粒度小，发生锁冲突的概率低，并发度高
-innodb 行锁是基于索引加载的 共享锁 排他锁
+- 行锁: 开销大，加锁慢；会出现死锁；锁定粒度小，发生锁冲突的概率低，并发度高 innodb 行锁是基于索引加载的 共享锁 排他锁
     - 锁冲突概率低，并发性高，但是会有死锁的情况出现
 - 表锁: 开销小，加锁快；不会出现死锁；锁定力度大，发生锁冲突概率高，并发度最低
 MyISAM 表共享锁 表独占写锁(mysql非索引字段)
+- 乐观锁 悲观锁 B+树
 
 # jira
 问题类型 工作流 界面 字段 优先级 状态
@@ -869,7 +869,7 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
 # JS
 - 注释: //   /**/
 - var let const
-- 数据类型: string number boolen Null Undefined 数组 map set
+- 数据类型: string number boolen Null Undefined 数组 map set object
 - 字符串: toUpperCase, toLowerCase, indexOf, substring, split
 - 数组: indexOf slice push pop unshift shift reverse splice concat join
     - 传入函数: map reduce filter every find findIndex sort
