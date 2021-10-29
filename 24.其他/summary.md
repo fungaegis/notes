@@ -919,7 +919,7 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
     - 查找原理: 通过键的一部分散列值在散列表中找, 如果找不到表元则报keyError, 如果找到表元则判断 键与表元是否相等(散列冲突) 如果不相等则用另一部分散列值去散列表的另一行中找 直至键相等取的值
 - 推导式: 列表推导式 字典/集合推导式 生成器表达式 三元表达式
 - 生成器 next send close throw 可迭代对象(可遍历) -> 迭代器(可next) -> 生成器
-- 标准函数: functools.filter map zip partial reduce
+- 标准函数: functools.reduce map zip partial filter
 - 内置函数: lambda n: about n expression
 - 闭包
     1. 函数中嵌套函数
