@@ -279,7 +279,7 @@ AI测试
         - zadd zrangebyscore name min max; zcard zcount name min max; zrank zscore
 - 批量删除
 - 过期策略: 定期删除 惰性删除 内存淘汰策略
-    - 内存淘汰策略: 8种 多使用 过期时间键种删除使用频率最少的键
+    - 内存淘汰策略: 8种 多使用 过期时间键中删除使用频率最少的键
 - 缓存穿透: 不断请求数据库和缓存中都无的数据, 导致请求不断直接访问至数据库, 使得数据库压力过大
     - 布隆过滤器(存在有可能不存在, 不存在一定不存在)
     - 接口层校验
@@ -519,7 +519,7 @@ ui用例: 100
 # http
 - 三次握手: 客 close syn-send established 服 close syn-rcvd established
     - 同步seq 建立可靠信道 防止失效报文延迟到达引发错误
-- 四次挥手: 客 established fin wait1 fin wait2 time wait close 服 established close wait last-ack close
+- 四次挥手: 客 established fin-wait1 fin-wait2 time-wait close 服 established close wait last-ack close
 - GET: 一个tcp数据包
 - POST: 两个tcp数据包
 - CA证书 https交换流程 
@@ -1130,7 +1130,7 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
     - LimitOffsetPagination: limit offset
     - CursorPagination
     - PageNumberPagination
-        - 自定义: 类属性: page_query_param page_size_query_param max_page_size page_size
+        - 自定义: 类属性: page_query_param page_size_query_param  max_page_size page_size
         - get_paginated_response 自定义返回值 self.page.paginator.num_pages self.page.number
     - 函数: paginate_queryset(qs) 分页 get_paginated_response(data) 添加信息
     - DEFAULT_PAGINATION_CLASS PAGE_SIZE pagination_class
@@ -1655,4 +1655,9 @@ spec: 具体规格
 - 布隆过滤器说某个元素在，可能会被误判
 - 布隆过滤器说某个元素不在，那么一定不在
 
-tip: 布隆过滤器最多支持2147483647个位数组
+tip: 布隆过滤器最多支持2147483647个位数组(20亿)
+
+报文分片:
+1. 每个数据链路层协议都有自己的帧格式, 帧格式内有MTU(最大传输单元), 当被封装成帧时, 报文总长度需要小于该长度
+2. IPv4报文最大长度为2^16
+3. 使用 标识 标志 分片偏移 来进行分片
