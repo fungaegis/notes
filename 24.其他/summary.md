@@ -1,5 +1,5 @@
 # 测试左移&右移
-常规流程: `需求 - 开发 - 测试 - 上线`. 从这个流程可以看出测试这个角色才参与流程是靠后的,因为依赖于开发交付的成果.
+常规流程: `需求 - 开发 - 测试 - 上线`. 从这个流程可以看出测试这个角色在参与流程中是靠后的,因为依赖于开发交付的成果.
 
 但是这种模式会存在一些问题, 
 1. 工作量不均衡, 测试在开发编码阶段工作量较轻, 到测试这个阶段又过重, 开发则反之
@@ -17,7 +17,9 @@
 3. 缩小测试周期: 交付的成果质量高, 那么测试环节的时间也会相应的降低
 
 核心:
-全员质量服务意识, 都为产品质量服务. 测试团队是有限的, 质量的参与人员不仅仅局限于测试人员, 只有通过赋能质量意识, 使团队成员都具备质量意识, 才能有效提高质量
+全员应具备质量意识, 都为产品质量服务. 
+
+测试团队是有限的, 质量的参与人员不仅仅局限于测试人员, 通过赋能质量意识, 使团队成员都具备质量意识, 才能有效提高质量.
 
 措施:
 - 有哪些活动可以提高质量上限（举例）？
@@ -51,7 +53,7 @@
 ### 测试右移
 目的: 及时发现,及时反馈
 
-核心: 围绕问题反馈、发现、定位、监控展开，参与人员则不仅仅局限于运维人员
+核心: 围绕问题`反馈、发现、定位、监控`展开，参与人员则不仅仅局限于运维人员
 
 措施: 
 1. 通过接入`prometheus` + `granfana` 实现数据监控
@@ -60,13 +62,19 @@
     3. 风控指标
 2. 接入阿里云日志告警(邮件, 短信)
 
+预计措施:
+1. 反馈: 及时跟进一线业务人员反馈情况
+2. 发现: 主动健康巡检(含健康检查)
+3. 定位: 链路追踪等措施
+4. 监控: 如上
+
 # 测试理论
 ## 测试计划
 1. 测试范围
 2. 测试策略
-    1. 明确”产品目标“
-    2. 进行”风险分析“
-    3. 适配”产品研发流程“
+    1. 明确'产品目标'
+    2. 进行'风险分析'
+    3. 适配'产品研发流程'
 3. 测试资源
     1. 人力资源
     2. 环境资源
@@ -173,12 +181,12 @@ AI测试
 1. 功能性: 适合性, 准确性, 安全性
 2. 可靠性: 成熟性, 容错性, 易恢复性
 3. 易用性: 易理解性, 易学性, 易操作性
-4. 效率: 时间, 资源
+4. 性能: 时间, 资源
 5. 维护性: 易分析性, 稳定性, 易测试性
 6. 可移植性: 易安装, 易替换
 
 # 质量影响要素
-技术, 流程, 阻止
+技术, 流程, 组织
 
 # 测试用例
 用例编号
@@ -205,7 +213,10 @@ AI测试
 
 # 算法
 1. 父子数组, 合并去重
-`reduce(lambda x,y: set(x) | set(y), array)`
+```py
+from functools import reduce
+reduce(lambda x,y: set(x) | set(y), array)
+```
 
 # 自定义nodeid
 参数:
@@ -260,12 +271,13 @@ AI测试
     - 支持lua脚本
 - 场景: 高频读 低频写 计数器 消息队列 
 - 配置 redis.conf 持久化 data
-- 打开持久化 --appendonly yes
+- 打开AOF持久化 --appendonly yes
+- 打开RDB持久化 SAVE BGSAVE
 - 命令:
     - redis-server
     - redis-cli -h host -p port -a pw
     - CONFIG GET *
-    - exists expire move persist ttl rename
+    - exists expire move persist ttl rename keys select
 - 数据类型: string hash list set zset
     - string 二进制安全 一个键最大能存512M
         - set get mset mget incr decr
@@ -274,10 +286,10 @@ AI测试
     - list 双向链表 增删快 最大成员数2^32-1 40亿+
         - lpush rpush lpop rpop lrange name start end; lset name index value; lindex name index; llen
     - set 哈希表 添加删除查找复杂度都是O(1) 差集交集并集 最大成员数2^32-1 40亿+
-        - sadd semebers sdiff sinter sunion sismember
+        - sadd smemebers sdiff sinter sunion sismember
     - zset 按score排序 最大成员数2^32-1 40亿+
         - zadd zrangebyscore name min max; zcard zcount name min max; zrank zscore
-- 批量删除
+- 批量删除 redis-cli -n 1 keys * | xargs redis-cli -n 1 del
 - 过期策略: 定期删除 惰性删除 内存淘汰策略
     - 内存淘汰策略: 8种 多使用 过期时间键中删除使用频率最少的键
 - 缓存穿透: 不断请求数据库和缓存中都无的数据, 导致请求不断直接访问至数据库, 使得数据库压力过大
@@ -312,7 +324,7 @@ AI测试
     - request.getfixturevalue() 调用fixture函数
 - 函数
     - fail importorskip(modname, min, reason) exit skip(reason, allow_module_level) skipif(condition, reason) param(value, marks, id) xfail(reason)
-- pytest.mark.parametrize(argnames, argvalues, indirect ids, scope)
+- pytest.mark.parametrize(argnames, argvalues, indirect, ids, scope)
     - 多重参数化时内层先运行
 - pytest.mark
     - xfail(condition, reason, raises, run, strict)
@@ -378,7 +390,7 @@ HookimplMarker实例的参数:
     - xpath: ancestor parent preceding following -sibling
 - 三大等待: 隐形等待 强制等待 显性等待
     - implicitly_wait(time)
-    - 强制等待 selenium.webdriver.support
+    - 显性等待 selenium.webdriver.support
         - .wait.WebDriverWait(driver, timeout)
             - 实例方法: .until() not_until()
         - .expected_conditions
@@ -525,7 +537,7 @@ ui用例: 100
 - CA证书 https交换流程 
 - http1.1 长连接 缓存处理
 - 2.0 服务推送 多路复用
-- 200 204无资源返回 301永久 302临时 401无认证 403禁止访问 404无法找到
+- 200 204无资源返回 301永久 302临时 401无认证    403禁止访问 404无法找到
 
 # nginx
 优势:
@@ -1022,7 +1034,7 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
     - Meta: app_label db_table abstract ordering proxy unique_together
     - field: autofield, booleanfield, emailfield, urlfield, textfield, integerfield, decimalfield, datetimefield, charfield, ForeignField, OneToOneField ManyToManyField
         - max_length max_digits decimal_places auto_now auto_now_add
-        - null blank db_column de_index default primary_key unique verbose_name help_text
+        - null blank db_column db_index default primary_key unique verbose_name help_text
         - to related_name on_delete 反向查询默认: 类_set
         - CASCADE PROTECT SET_NULL SET_DEFAULT SET() DO_NOTHING
         - m2m: add remove clear 选项: symmetrical(不支持反向)
