@@ -28,7 +28,7 @@
 2. 合理的需求分析（评估需求的质量，分析需求的合理性以及完整性）
 3. 出色的系统架构
 4. 完整的系统设计（评估设计的质量，分析需求的合理性以及完整性）
-5. 进行研发标准的定义
+5. 研发标准的定义
 6. 更早的测试分析（先于开发完成需求的分析，做好各种评审的准备）
 7. 尽早的测试执行（提早参与测试执行，在集成前就发现一些问题）
 
@@ -429,8 +429,8 @@ HookimplMarker实例的参数:
 # appium
 - 流程: 
     1. appium serve 使用adb向设备部署Bootstrap.jar
-    2. 脚本发送http协议webdriver协议json格式到 appium server 4723
-    3. Bootstrap.jar 开启 4724端口, server发送socket协议json格式到Bootstrap.jar
+    2. 脚本发送http协议webdriver规范json格式到 appium server 4723
+    3. Bootstrap.jar 开启 4724端口, server调用socket发送json格式到Bootstrap.jar
     4. Bootstrap.jar 将指令发送到uiautomator
     5. uiautomator执行
 - UiAutoMator是android sdk自带的app ui自动化测试java库
