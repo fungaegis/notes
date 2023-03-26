@@ -429,7 +429,7 @@ HookimplMarker实例的参数:
 # appium
 - 流程: 
     1. appium serve 使用adb向设备部署Bootstrap.jar
-    2. 脚本发送http协议webdriver规范json格式到 appium server 4723
+    2. 脚本以http协议发送webdriver规范json格式到 appium server 4723
     3. Bootstrap.jar 开启 4724端口, server调用socket发送json格式到Bootstrap.jar
     4. Bootstrap.jar 将指令发送到uiautomator
     5. uiautomator执行
@@ -524,9 +524,6 @@ HookimplMarker实例的参数:
 4. pytest_runtest_call
 - 在web模式下,发送cookie,用于在zalenium中做注释
 
-api用例: 500  sheet: 40+
-平台用例: 700 场景100+
-ui用例: 100 
 
 # http
 - 三次握手: 客 close syn-send established 服 close syn-rcvd established
@@ -634,7 +631,7 @@ http {
 - sort: -n 数字 -r 倒序 -k 作用域
 - wc: 行数 单词数 字节数
 - find: -name 查找文件
-- grep: -i 区分大小写 -c 匹配总量 -l 文件名 -r 递归 -n 行号 -w 单词
+- grep: -i 区分大小写 -c 匹配总量 -l 文件名 -r 递归 -n 行号 -w 单词 -A后 -B前 -C上下
 - sed: -i 真实 -n 仅显示 -f 文件
     - a后 i前 r写入 w输出 p显示 s/old/new/ig替换 删除d
     - `/^start/,/^end/`
@@ -1251,6 +1248,10 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
     - yarn list
     - yarn global add remove upgrade list
     - yarn run xxx
+- vite
+    - 轻 快 冷服务启动 热更新 按需编译
+    - npm init vite-app project_name
+    - yarn create vite-app project_name
 - vue
     - 优点: 解耦视图与数据 复用组件 前端路由 状态管理 虚拟DOM
     - MVVM model view viewmodel
@@ -1452,10 +1453,7 @@ MyISAM 表共享锁 表独占写锁(mysql非索引字段)
     - module 略
 - vue-cli
     - npm run build => vue-cli-service build
-- vite
-    - 轻 快 冷服务启动 热更新 按需编译
-    - npm init vite-app project_name
-    - yarn create vite-app project_name
+
 
 # 前端项目
 - 概述
