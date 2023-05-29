@@ -96,10 +96,8 @@ print(prompt_text)
 llm = OpenAI(temperature=0.9)
 print(llm(prompt_text))
 
-
-
 # 链
-from langchain.chains import LLMChain
+from langchain.chains import LLMChain, SimpleSequentialChain
 
 prompt_template = "{first} + {second} = ?"
 prompt = PromptTemplate(
@@ -110,3 +108,42 @@ llm = OpenAI(temperature=0.9)
 chain = LLMChain(llm=llm, prompt=prompt)
 
 print(chain.run("1", "1"))
+
+## 创造第二条链
+second_prompt = PromptTemplate(
+    input_variables=[],
+    template="{result}+3=?"
+)
+
+chain_second = LLMChain(llm=llm, prompt=second_prompt)
+
+overall_chain = SimpleSequentialChain(chains=[chain, chain_second], verbose=True)
+
+print(overall_chain.run("1", "2"))
+
+# agent代理
+from langchain.agents import load_tools
+from langchain.agents import initialize_agent
+from langchain.agents import AgentType
+from langchain.llms import OpenAI
+
+llm = OpenAI(temperature=0)
+tools = load_tools(["serpapi"], llm=llm)
+agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+
+agent.run("明天在北京穿什么衣服合适?")
+
+"""
+> Entering new AgentExecutor chain...
+I need to find out what the weather will be like tomorrow in Beijing.
+Action: Search
+Action Input: "Beijing weather tomorrow"
+Observation: Beijing, Beijing ; Current Weather. 2:41 AM. 61° ; TODAY'S WEATHER FORECAST. 5/10. 82° ; TONIGHT'S WEATHER FORECAST. 5/10. 57° ;
+TOMORROW'S WEATHER FORECAST. 5/11.
+Thought: It looks like it will be warm tomorrow, so I should wear something light.
+Final Answer: 明天在北京穿薄衣服合适 。
+> Finished chain.
+"""
+
+# 记忆
+## 记忆有两种类型：短期和长期记忆。短期记忆一般指单一会话时传递数据，长期记忆则是处理多个会话时获取和更新信息。
