@@ -29,3 +29,49 @@
 - 代理: 围绕模型的包装器，接收用户输入，决定模型的行为
 - 工具集: 解决特定问题的工具集合
 - 代理执行器: 代理和一组工具，调用代理
+
+|Apify | 一个数据抓取平台|
+|--- | ---|
+|ArXiv | arXiv是一个收集物理学、数学、计算机科学、生物学与数理经济学的论文预印本的网站|
+|AWS Lambda | Amazon serverless计算服务|
+|Shell工具 | 执行shell命令|
+|Bing Search | Bing搜索|
+|ChatGPT插件 | |
+|DuckDuckGo | DuckDuckGo搜索|
+|Google Places | Google地点|
+|Google Search | Google搜索|
+|Google Serper API | 一个从google搜索提取数据的API|
+|Gradio Tools | Gradio应用|
+|IFTTT Webhooks | 一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令|
+|OpenWeatherMap | 天气查询|
+|Python REPL | 执行python代码|
+|Requests | 发送网络请求|
+|SceneXplain | 一个访问ImageCaptioning的工具，通过url就可以获取图像描述|
+|Wikipedia | 查询wiki数据|
+|Wolfram Alpha | 一个计算平台，可以计算复杂的数学问题|
+|YouTubeSearchTool | 视频搜索|
+|Zapier | 一个工作流程自动化平台|
+
+|工具 | 介绍|
+|--- | ---|
+|Apify | 一个数据抓取平台|
+|ArXiv | arXiv是一个收集物理学、数学、计算机科学、生物学与数理经济学的论文预印本的网站|
+|AWS Lambda | Amazon serverless计算服务|
+|Shell工具 | 执行shell命令|
+|Bing Search | Bing搜索|
+|ChatGPT插件 | |
+|DuckDuckGo | DuckDuckGo搜索|
+|Google Places | Google地点|
+|Google Search | Google搜索|
+|Google Serper API | 一个从google搜索提取数据的API|
+|Gradio Tools | Gradio应用|
+|IFTTT Webhooks | 一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令|
+|OpenWeatherMap | 天气查询|
+|Python REPL | 执行python代码|
+|Requests | 发送网络请求|
+|SceneXplain | 一个访问ImageCaptioning的工具，通过url就可以获取图像描述|
+|Wikipedia | 查询wiki数据|
+|Wolfram Alpha | 一个计算平台，可以计算复杂的数学问题|
+|YouTubeSearchTool | 视频搜索|
+|Zapier | 一个工作流程自动化平台|
+
